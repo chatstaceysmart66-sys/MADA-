@@ -1,3 +1,11 @@
+date_utc=2026-11-11T15:41:21Z
+compiler=g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+base_commit=1ebde67
+cmd: g++ -std=c++17 -Wall -Wextra -Werror -O1 -fsanitize=address,undefined -fno-omit-frame-pointer Tests/HostTests/test_main.cpp -o /tmp/owg_host_tests_sanitized
+compile_exit=0
+PASS  English game name exact
+PASS  Arabic game name exact
+PASS  game tagline exact
 PASS  credit text exact
 PASS  units 1000cm/s = 36km/h
 PASS  units roundtrip
@@ -38,4 +46,4 @@ PASS  save duplicate field rejected
 PASS  save falls back to backup when primary corrupt
 PASS  save both corrupt => none
 
-SUMMARY pass=39 fail=0
+SUMMARY pass=42 fail=0

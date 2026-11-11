@@ -2,7 +2,7 @@
   "FileVersion": 3,
   "EngineAssociation": "5.8",
   "Category": "Games",
-  "Description": "Android-first offline open-world driving and exploration prototype.",
+  "Description": "MADA | مَدَى — BEYOND THE HORIZON. Offline Android driving and exploration prototype.",
   "Modules": [
     {
       "Name": "OpenWorldGame",

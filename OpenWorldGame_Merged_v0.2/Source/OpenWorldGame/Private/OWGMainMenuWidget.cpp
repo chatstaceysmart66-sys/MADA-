@@ -1,6 +1,7 @@
 #include "OWGMainMenuWidget.h"
 
 #include "Components/Button.h"
+#include "Components/Border.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/TextBlock.h"
@@ -22,6 +23,47 @@ void UOWGMainMenuWidget::NativeConstruct()
     RootCanvas = WidgetTree->ConstructWidget<UCanvasPanel>(UCanvasPanel::StaticClass(), TEXT("RootCanvas"));
     WidgetTree->RootWidget = RootCanvas;
 
+    StartupBackdrop = WidgetTree->ConstructWidget<UBorder>(UBorder::StaticClass(), TEXT("StartupBackdrop"));
+    UCanvasPanelSlot* BackdropSlot = RootCanvas->AddChildToCanvas(StartupBackdrop);
+    BackdropSlot->SetAnchors(FAnchors(0.0f, 0.0f, 1.0f, 1.0f));
+    BackdropSlot->SetOffsets(FMargin(0.0f));
+    StartupBackdrop->SetBrushColor(FLinearColor(0.025f, 0.055f, 0.065f, 0.94f));
+
+    StartupPanel = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("StartupPanel"));
+    UCanvasPanelSlot* StartupSlot = RootCanvas->AddChildToCanvas(StartupPanel);
+    StartupSlot->SetAnchors(FAnchors(0.5f, 0.5f));
+    StartupSlot->SetAlignment(FVector2D(0.5f, 0.5f));
+    StartupSlot->SetAutoSize(true);
+
+    UTextBlock* StartupTitle = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StartupTitle"));
+    StartupTitle->SetText(FText::FromString(UTF8_TO_TCHAR(OW::GameNameEnglishUtf8)));
+    StartupTitle->SetJustification(ETextJustify::Center);
+    StartupTitle->SetColorAndOpacity(FSlateColor(FLinearColor(0.88f, 0.70f, 0.38f, 1.0f)));
+    StartupPanel->AddChildToVerticalBox(StartupTitle);
+
+    UTextBlock* StartupArabicTitle = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StartupArabicTitle"));
+    StartupArabicTitle->SetText(FText::FromString(UTF8_TO_TCHAR(OW::GameNameArabicUtf8)));
+    StartupArabicTitle->SetJustification(ETextJustify::Center);
+    StartupPanel->AddChildToVerticalBox(StartupArabicTitle);
+
+    UTextBlock* StartupTagline = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StartupTagline"));
+    StartupTagline->SetText(FText::FromString(UTF8_TO_TCHAR(OW::GameTaglineUtf8)));
+    StartupTagline->SetJustification(ETextJustify::Center);
+    StartupPanel->AddChildToVerticalBox(StartupTagline);
+
+    UTextBlock* StartupCredit = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StartupDeveloperCredit"));
+    StartupCredit->SetText(FText::FromString(UTF8_TO_TCHAR(OW::DeveloperCreditUtf8)));
+    StartupCredit->SetJustification(ETextJustify::Center);
+    StartupPanel->AddChildToVerticalBox(StartupCredit);
+
+    UButton* StartupContinueButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("StartupContinueButton"));
+    UTextBlock* StartupContinueText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
+    StartupContinueText->SetText(FText::FromString(TEXT("متابعة")));
+    StartupContinueText->SetJustification(ETextJustify::Center);
+    StartupContinueButton->AddChild(StartupContinueText);
+    StartupPanel->AddChildToVerticalBox(StartupContinueButton);
+    StartupContinueButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleStartupContinueClicked);
+
     MainMenuPanel = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("MainMenuPanel"));
     UCanvasPanelSlot* MenuSlot = RootCanvas->AddChildToCanvas(MainMenuPanel);
     MenuSlot->SetAnchors(FAnchors(0.5f, 0.5f));
@@ -30,9 +72,20 @@ void UOWGMainMenuWidget::NativeConstruct()
     MenuSlot->SetAutoSize(true);
 
     UTextBlock* Title = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("GameTitle"));
-    Title->SetText(FText::FromString(TEXT("OPEN WORLD — تجربة أولية")));
+    Title->SetText(FText::FromString(UTF8_TO_TCHAR(OW::GameNameEnglishUtf8)));
     Title->SetJustification(ETextJustify::Center);
     MainMenuPanel->AddChildToVerticalBox(Title);
+
+    UTextBlock* ArabicTitle = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("ArabicGameTitle"));
+    ArabicTitle->SetText(FText::FromString(UTF8_TO_TCHAR(OW::GameNameArabicUtf8)));
+    ArabicTitle->SetJustification(ETextJustify::Center);
+    MainMenuPanel->AddChildToVerticalBox(ArabicTitle);
+
+    UTextBlock* Tagline = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("GameTagline"));
+    Tagline->SetText(FText::FromString(UTF8_TO_TCHAR(OW::GameTaglineUtf8)));
+    Tagline->SetJustification(ETextJustify::Center);
+    Tagline->SetColorAndOpacity(FSlateColor(FLinearColor(0.72f, 0.82f, 0.81f, 1.0f)));
+    MainMenuPanel->AddChildToVerticalBox(Tagline);
 
     UTextBlock* Credit = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("DeveloperCredit"));
     Credit->SetText(FText::FromString(UTF8_TO_TCHAR(OW::DeveloperCreditUtf8)));
@@ -51,7 +104,7 @@ void UOWGMainMenuWidget::NativeConstruct()
     FrameCapLabel = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("FrameCapLabel"));
     FrameCapLabel->SetJustification(ETextJustify::Center);
     MainMenuPanel->AddChildToVerticalBox(FrameCapLabel);
-    UpdateFrameCapLabel();
+    SyncFrameCapSelection();
 
     StatusText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StatusText"));
     StatusText->SetText(FText::FromString(TEXT("نموذج أولي — الأصول الفنية النهائية غير مضافة")));
@@ -110,6 +163,8 @@ void UOWGMainMenuWidget::NativeConstruct()
     ExitVehicleButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleVehicleExitClicked);
 
     bGameStarted = false;
+    StartupPanel->SetVisibility(ESlateVisibility::Visible);
+    MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
     FootInteractButton->SetVisibility(ESlateVisibility::Collapsed);
     JumpButton->SetVisibility(ESlateVisibility::Collapsed);
     SprintButton->SetVisibility(ESlateVisibility::Collapsed);
@@ -163,6 +218,25 @@ void UOWGMainMenuWidget::UpdateFrameCapLabel()
     {
         FrameCapLabel->SetText(FText::FromString(Label));
     }
+}
+
+void UOWGMainMenuWidget::SyncFrameCapSelection()
+{
+    FrameCapIndex = 0;
+    if (const UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
+    {
+        const float CurrentLimit = GameInstance->GetFrameRateLimit();
+        static const float FrameCaps[] = { 0.0f, 30.0f, 40.0f, 60.0f };
+        for (int32 Index = 0; Index < UE_ARRAY_COUNT(FrameCaps); ++Index)
+        {
+            if (FMath::IsNearlyEqual(CurrentLimit, FrameCaps[Index]))
+            {
+                FrameCapIndex = Index;
+                break;
+            }
+        }
+    }
+    UpdateFrameCapLabel();
 }
 
 void UOWGMainMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -221,6 +295,13 @@ void UOWGMainMenuWidget::SetStatusMessage(const FText& Message)
     if (StatusText) StatusText->SetText(Message);
 }
 
+void UOWGMainMenuWidget::HandleStartupContinueClicked()
+{
+    StartupPanel->SetVisibility(ESlateVisibility::Collapsed);
+    StartupBackdrop->SetVisibility(ESlateVisibility::Collapsed);
+    MainMenuPanel->SetVisibility(ESlateVisibility::Visible);
+}
+
 void UOWGMainMenuWidget::HandleStartClicked()
 {
     bGameStarted = true;
@@ -242,6 +323,7 @@ void UOWGMainMenuWidget::HandleContinueClicked()
     {
         bLoaded = GameInstance->LoadProgress();
     }
+    if (bLoaded) SyncFrameCapSelection();
     SetStatusMessage(FText::FromString(bLoaded ? TEXT("تم تحميل الحفظ المحلي") : TEXT("لم يتم العثور على حفظة — بدأنا تجربة جديدة")));
     HandleStartClicked();
 }

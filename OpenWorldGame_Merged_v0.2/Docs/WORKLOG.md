@@ -1,5 +1,14 @@
 # Worklog — merged v0.2
 
+## 2026-11-11 — official MADA branding and startup screen
+
+- Set the product identity to MADA | مَدَى with the tagline BEYOND THE HORIZON; kept the OpenWorldGame module and package ID stable for compatibility.
+- Added centralized UTF-8 brand constants and a text startup screen with developer credit and a working continue-to-menu button.
+- Set the Unreal project name and Android display name to MADA.
+- Synced the displayed frame-cap option with the active game-user setting at startup and after loading a save.
+- Added host-side branding checks; Python integrity tests pass 11/11 and C++ host tests pass 42/42.
+- Unreal compilation, Android packaging, and device validation remain NOT RUN because the required tools and device are unavailable.
+
 ## 2026-11-11 — source merge and hardening
 
 - Examined the full Arabic master specification and both ZIP archives before combining them.

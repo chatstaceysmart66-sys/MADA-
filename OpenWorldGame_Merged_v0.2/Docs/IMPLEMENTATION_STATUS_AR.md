@@ -1,4 +1,4 @@
-# حالة التنفيذ — الدمج v0.2
+# حالة التنفيذ — MADA | مَدَى، الدمج v0.2
 
 **الحالة العامة: INCOMPLETE / MERGED SOURCE STARTER — NOT AN APK**
 
@@ -6,6 +6,8 @@
 
 | النظام | الحالة | التوضيح |
 |---|---|---|
+| هوية المشروع | SOURCE CREATED / HOST TESTED | MADA | مَدَى، وBEYOND THE HORIZON في metadata والواجهة؛ اسم الوحدة الداخلي محفوظ للتوافق |
+| شاشة الافتتاح | SOURCE CREATED / HOST TESTED | شاشة نصية تعرض الاسم والاعتماد وزر متابعة إلى القائمة؛ لم تُختبر داخل Unreal |
 | Unreal project / Runtime module / Targets | SOURCE CREATED | ملفات المشروع والوحدة والهدفين موجودة؛ لم تُبنَ بالمحرك هنا |
 | شخصية ثالثة المنظور | SOURCE CREATED | CharacterMovement وكاميرا ومشي/ركض/قفز من إدخال اللعبة |
 | مركبة اختبار | SOURCE CREATED | جسم صلب واحد مع قوى تسارع وفرملة وتوجيه؛ ليست Chaos Vehicles |
@@ -16,8 +18,8 @@
 | FPS | SOURCE CREATED | نافذة قياس من زمن الإطار؛ مستقلة عن حد الإطارات |
 | Save/Load داخل اللعبة | SOURCE CREATED | Unreal `USaveGame` محلي لموضع الشخصية/المركبة وحد الإطارات |
 | Portable core helpers | SOURCE CREATED / HOST TESTED | تحويل وحدات، قياس FPS، دخول/خروج، نموذج حفظ/ترحيل مستقل |
-| Python integrity tests | PASS 10/10 | اختبارات بنية ومراجع مصدر؛ ليست اختبارات Unreal |
-| Host C++ tests | PASS 39/39 | g++ C++17 واختبارات منطق مستقلة عن Unreal |
+| Python integrity tests | PASS 11/11 | اختبارات بنية ومراجع مصدر وهوية MADA؛ ليست اختبارات Unreal |
+| Host C++ tests | PASS 42/42 | g++ C++17 واختبارات منطق وهوية مستقلة عن Unreal |
 | Static file audit | PASS | فحص ملفات ومسارات وإعدادات ومراجع داخل المشروع |
 | Unreal C++ compile / UHT | BLOCKED / NOT RUN | Unreal Engine 5.8 غير مثبت في بيئة الدمج |
 | Android APK | NOT BUILT | SDK/NDK/Unreal غير متاحة؛ لا يوجد ملف APK |

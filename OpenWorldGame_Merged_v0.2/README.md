@@ -1,6 +1,8 @@
-# OpenWorldGame — merged Android-first Unreal starter
+# MADA | مَدَى — Android-first Unreal starter
 
-Merged Unreal Engine 5.8 C++ source prototype for an original offline single-player Android open-world driving/exploration game.
+**BEYOND THE HORIZON**
+
+Unreal Engine 5.8 C++ source prototype for an original offline single-player Android driving and exploration game. The official in-game identity is MADA | مَدَى, with developer credit «تطوير: عبدالله لازم».
 
 **Status: INCOMPLETE / SOURCE STARTER. No APK has been built and Unreal gameplay has not been run.**
 

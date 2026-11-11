@@ -12,12 +12,27 @@ class ProjectIntegrityTests(unittest.TestCase):
         data = json.loads((ROOT / "OpenWorldGame.uproject").read_text(encoding="utf-8"))
         self.assertEqual(data["EngineAssociation"], "5.8")
         self.assertEqual(data["Modules"][0]["Name"], "OpenWorldGame")
+        self.assertIn("MADA | مَدَى", data["Description"])
 
     def test_android_configuration_is_present(self):
         config = (ROOT / "Config/DefaultEngine.ini").read_text(encoding="utf-8")
         self.assertIn("PackageName=com.abdullahlazim.openworldgame", config)
+        self.assertIn("ApplicationDisplayName=MADA", config)
         self.assertIn("bBuildForArm64=True", config)
         self.assertIn("Orientation=Landscape", config)
+
+    def test_mada_branding_is_configured_for_startup_and_menu(self):
+        game_config = (ROOT / "Config/DefaultGame.ini").read_text(encoding="utf-8")
+        widget = (ROOT / "Source/OpenWorldGame/Private/OWGMainMenuWidget.cpp").read_text(encoding="utf-8")
+        self.assertIn("ProjectName=MADA", game_config)
+        self.assertIn("GameNameEnglishUtf8", widget)
+        self.assertIn("GameNameArabicUtf8", widget)
+        self.assertIn("GameTaglineUtf8", widget)
+        self.assertIn("StartupBackdrop->SetBrushColor", widget)
+        self.assertIn("StartupBackdrop->SetVisibility(ESlateVisibility::Collapsed)", widget)
+        self.assertIn("HandleStartupContinueClicked", widget)
+        self.assertIn("void UOWGMainMenuWidget::SyncFrameCapSelection()", widget)
+        self.assertIn("if (bLoaded) SyncFrameCapSelection();", widget)
 
     def test_required_gameplay_sources_exist(self):
         required = [

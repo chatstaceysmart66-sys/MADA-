@@ -7,6 +7,7 @@
 #include "OWGMainMenuWidget.generated.h"
 
 class UCanvasPanel;
+class UBorder;
 class UVerticalBox;
 class UButton;
 class UTextBlock;
@@ -24,8 +25,11 @@ public:
 private:
     UButton* AddMenuButton(const FText& Label, const FName& Name);
     UButton* AddTouchButton(const FText& Label, const FVector2D& Position, const FVector2D& Size, const FName& Name, const FAnchors& Anchors = FAnchors(1.0f, 1.0f), const FVector2D& Alignment = FVector2D(1.0f, 1.0f));
+    void SyncFrameCapSelection();
     void UpdateFrameCapLabel();
 
+    UFUNCTION()
+    void HandleStartupContinueClicked();
     UFUNCTION()
     void HandleStartClicked();
     UFUNCTION()
@@ -65,6 +69,10 @@ private:
 
     UPROPERTY()
     TObjectPtr<UCanvasPanel> RootCanvas;
+    UPROPERTY()
+    TObjectPtr<UBorder> StartupBackdrop;
+    UPROPERTY()
+    TObjectPtr<UVerticalBox> StartupPanel;
     UPROPERTY()
     TObjectPtr<UVerticalBox> MainMenuPanel;
     UPROPERTY()

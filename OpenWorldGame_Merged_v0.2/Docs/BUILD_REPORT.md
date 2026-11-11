@@ -6,9 +6,9 @@ Date: 2026-11-11. Environment: Linux x86_64 container. The results below are the
 
 | Target | Exact command | Result | Status |
 |---|---|---|---|
-| C++ portable core | `bash Scripts/run_host_tests.sh` (script compiles with `g++ -std=c++17 -Wall -Wextra -Werror -O1`) | compile exit 0; run exit 0; 39/39 tests | PASS |
-| C++ sanitizers | `g++ -std=c++17 -Wall -Wextra -Werror -O1 -fsanitize=address,undefined -fno-omit-frame-pointer Tests/HostTests/test_main.cpp -o /tmp/owg_host_tests_sanitized` then `ASAN_OPTIONS=detect_leaks=1 /tmp/owg_host_tests_sanitized` | 39/39 tests; no sanitizer report; exit 0 | PASS |
-| Python integrity tests | `python3 -m unittest discover -s Tests -v` | 10 tests; exit 0 | PASS |
+| C++ portable core | `bash Scripts/run_host_tests.sh` (script compiles with `g++ -std=c++17 -Wall -Wextra -Werror -O1`) | compile exit 0; run exit 0; 42/42 tests | PASS |
+| C++ sanitizers | `g++ -std=c++17 -Wall -Wextra -Werror -O1 -fsanitize=address,undefined -fno-omit-frame-pointer Tests/HostTests/test_main.cpp -o /tmp/owg_host_tests_sanitized` then `ASAN_OPTIONS=detect_leaks=1 /tmp/owg_host_tests_sanitized` | 42/42 tests; no sanitizer report; exit 0 | PASS |
+| Python integrity tests | `python3 -m unittest discover -s Tests -v` | 11 tests; exit 0 | PASS |
 | Project static validator | `python3 Scripts/validate_project.py` | `STATIC INTEGRITY: PASS`; exit 0 | PASS |
 | File/dependency audit | `python3 Scripts/audit_files.py` | 25 pass / 0 fail; exit 0 | PASS |
 

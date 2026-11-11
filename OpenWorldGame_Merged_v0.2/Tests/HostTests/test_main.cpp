@@ -34,6 +34,9 @@ int main()
 {
     using namespace OW;
 
+    CHECK("English game name exact", std::strcmp(GameNameEnglishUtf8, "MADA") == 0);
+    CHECK("Arabic game name exact", std::strcmp(GameNameArabicUtf8, "مَدَى") == 0);
+    CHECK("game tagline exact", std::strcmp(GameTaglineUtf8, "BEYOND THE HORIZON") == 0);
     CHECK("credit text exact", std::strcmp(DeveloperCreditUtf8, "تطوير: عبدالله لازم") == 0);
     CHECK("units 1000cm/s = 36km/h", std::fabs(CmPerSecToKmh(1000.0) - 36.0) < 1e-9);
     CHECK("units roundtrip", std::fabs(KmhToCmPerSec(CmPerSecToKmh(1234.5)) - 1234.5) < 1e-9);
