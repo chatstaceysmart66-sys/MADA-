@@ -1,0 +1,8 @@
+STATIC INTEGRITY: PASS
+Project: OpenWorldGame.uproject
+Module: OpenWorldGame
+C++ source/header files checked: 21
+Project includes, module files, default classes, Android config and input mappings: checked
+WARNING: No .uasset/.umap art or map files are included; the greybox environment is spawned by C++ at runtime.
+ENGINE COMPILE: NOT RUN (Unreal Engine 5.8 is not installed in this environment)
+ANDROID APK: NOT BUILT (Android packaging toolchain/device is not available here)

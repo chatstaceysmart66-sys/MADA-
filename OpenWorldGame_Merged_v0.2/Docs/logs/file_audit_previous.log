@@ -1,0 +1,26 @@
+PASS  module OpenWorldGame: Build.cs exists
+PASS  module OpenWorldGame: module cpp exists
+PASS  target file OpenWorldGame.Target.cs
+PASS  target file OpenWorldGameEditor.Target.cs
+PASS  plugin ChaosVehiclesPlugin listed as enabled (existence in engine: not verifiable here)
+PASS  plugin EnhancedInput listed as enabled (existence in engine: not verifiable here)
+PASS  android: arm64 only
+PASS  android: no INTERNET permission
+PASS  android: min SDK 26 / target 35
+PASS  no absolute dev paths in config
+PASS  Source/OpenWorldGameEditor.Target.cs: no network includes
+PASS  Source/OpenWorldGame.Target.cs: no network includes
+PASS  Source/OpenWorldGame/OpenWorldGame.Build.cs: no network includes
+PASS  Source/OpenWorldGame/OpenWorldGame.cpp: no network includes
+PASS  Source/OpenWorldGame/SaveSystem/OWSaveData.h: no network includes
+PASS  Source/OpenWorldGame/Core/OWCredits.h: no network includes
+PASS  Source/OpenWorldGame/Core/OWUnits.h: no network includes
+PASS  Source/OpenWorldGame/Core/OWFrameStats.h: no network includes
+PASS  Source/OpenWorldGame/Core/OWVehicleEntry.h: no network includes
+PASS  referenced file Tests/HostTests/test_main.cpp
+PASS  referenced file Scripts/run_host_tests.sh
+PASS  doc Docs/ASSET_LEDGER.csv
+PASS  doc Docs/ASSET_LICENSE_MANIFEST.csv
+PASS  doc Docs/ANDROID_DEVICE_TEST_MATRIX.csv
+
+AUDIT pass=24 fail=0

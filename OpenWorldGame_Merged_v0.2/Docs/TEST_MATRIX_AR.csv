@@ -1,0 +1,21 @@
+TestId,Area,Test,Status,Evidence,Notes
+ST-001,Project,uproject JSON parses,PASS,Scripts/validate_project.py,Python validator
+ST-002,Project,Single runtime module and target files exist,PASS,Scripts/audit_files.py,Static path audit only
+ST-003,Source,Local OWG Core SaveSystem includes resolve,PASS,Docs/logs/file_audit.log,Host-side file audit
+ST-004,Input,Axis and Action mappings match C++ bindings,PASS,Scripts/validate_project.py,Static names comparison
+HOST-001,C++,Engine-independent core logic tests,PASS,Docs/logs/host_tests.log,39/39 with g++ C++17; not Unreal tests
+HOST-002,C++,ASan and UBSan host tests,PASS,Docs/logs/host_tests_sanitized.log,39/39; host-only
+PY-001,Python,Project integrity tests,PASS,Docs/PYTHON_TEST_RESULTS.txt,10/10
+AUD-001,Project,Static file and dependency audit,PASS,Docs/logs/file_audit.log,25/25
+UE-001,Build,UnrealHeaderTool completes,BLOCKED,,Requires Unreal Engine 5.8
+UE-002,Build,OpenWorldGameEditor Win64 Development build,BLOCKED,,Requires UE 5.8 and matching toolchain
+UE-003,Runtime,PIE reaches menu and all buttons work,NOT RUN,,Requires Unreal Editor
+GAME-001,Character,Walk sprint jump camera touch input,NOT RUN,,Requires runtime/device test
+GAME-002,Vehicle,Physics/throttle/brake/steering,NOT RUN,,Rigid-body source prototype only
+GAME-003,Vehicle,Enter/exit and safe possession,NOT RUN,,Pure logic host-tested; Unreal Runtime not tested
+SAVE-001,Offline,USaveGame save/load after app restart,BLOCKED,,Requires UE Runtime/Android build/device
+AND-001,Android,arm64 Shipping APK package,BLOCKED,,UE and SDK/NDK unavailable
+AND-002,Android,Install and launch on physical phone,BLOCKED,,No APK/ADB/device available
+AND-003,Offline,Airplane mode gameplay test,BLOCKED,,Requires physical Android device
+PERF-001,Performance,Measured FPS CPU GPU RAM thermal test,BLOCKED,,No build or named device
+ASSET-001,Licenses,Third-party asset license verification,PASS,,No external assets are included

@@ -1,0 +1,35 @@
+date_utc=2026-11-11T14:42:47Z
+compiler=g++ (Debian 14.2.0-19) 14.2.0
+commit=none
+cmd: g++ -std=c++17 -Wall -Wextra -Werror -O1 Tests/HostTests/test_main.cpp -o /tmp/ow_host_tests
+compile_exit=0
+PASS  credit text exact
+PASS  units 1000cm/s = 36km/h
+PASS  units roundtrip
+PASS  fps: no data => -1
+PASS  fps: 40 fps measured ~40
+PASS  fps: measured independent of selected cap
+PASS  budget 60fps=16.67ms
+PASS  budget 120fps=8.33ms
+PASS  caps 60Hz = {30,60}
+PASS  caps 90Hz = {30,45,90}
+PASS  caps 120Hz = {30,40,60,120}
+PASS  120 never offered on 60Hz
+PASS  caps invalid refresh => empty
+PASS  enter ok
+PASS  enter too far
+PASS  enter while moving fast
+PASS  enter seat taken
+PASS  exit: first spot is driver side
+PASS  exit: falls back to rear
+PASS  exit: all blocked => none (no stuck placement)
+PASS  save roundtrip
+PASS  save corruption detected
+PASS  save truncated rejected
+PASS  save v1 migrates to v2
+PASS  save newer version rejected
+PASS  save falls back to backup when primary corrupt
+PASS  save both corrupt => none
+
+SUMMARY pass=27 fail=0
+run_exit=0

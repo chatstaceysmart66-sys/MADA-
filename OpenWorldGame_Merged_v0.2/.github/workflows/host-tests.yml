@@ -1,0 +1,15 @@
+name: owg-host-validation
+on: [push, pull_request]
+jobs:
+  host-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static project validation
+        run: python3 Scripts/validate_project.py
+      - name: File and dependency audit
+        run: python3 Scripts/audit_files.py
+      - name: Python integrity tests
+        run: python3 -m unittest discover -s Tests -v
+      - name: Engine-independent C++ tests
+        run: bash Scripts/run_host_tests.sh

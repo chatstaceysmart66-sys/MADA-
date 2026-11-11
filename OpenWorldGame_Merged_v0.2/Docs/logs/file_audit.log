@@ -1,0 +1,27 @@
+PASS  exactly one Runtime module
+PASS  module OpenWorldGame: Build.cs
+PASS  module OpenWorldGame: source entry
+PASS  module OpenWorldGame: Game Target
+PASS  module OpenWorldGame: Editor Target
+PASS  Android arm64 configured
+PASS  Android x86_64 excluded
+PASS  Android minimum/target SDK declared
+PASS  Vulkan mobile path enabled
+PASS  no INTERNET permission configured
+PASS  no absolute workstation paths in config
+PASS  Android package id present
+PASS  GameMode class configured
+PASS  GameInstance class configured
+PASS  local OWG/Core/SaveSystem includes resolve
+PASS  required path Scripts/validate_project.py
+PASS  required path Scripts/run_host_tests.sh
+PASS  required path Scripts/audit_files.py
+PASS  required path Tests/test_project_integrity.py
+PASS  required path Tests/HostTests/test_main.cpp
+PASS  required path Docs/MASTER_SPEC_AR_v0.3.txt
+PASS  required path Docs/ASSET_LEDGER.csv
+PASS  required path Docs/ASSET_LICENSE_MANIFEST.csv
+PASS  required path Docs/ANDROID_DEVICE_TEST_MATRIX.csv
+PASS  plugin declarations are well-formed (zero optional plugins is valid)
+
+AUDIT pass=25 fail=0
