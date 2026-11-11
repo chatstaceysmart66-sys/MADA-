@@ -11,6 +11,7 @@ class OPENWORLDGAME_API UOWGGameInstance : public UGameInstance
 
 public:
     bool StartNewGame();
+    bool HasProgressSave() const;
     bool ConsumeStartNewGameAfterTravel();
 
     UFUNCTION(BlueprintCallable, Category="Save")

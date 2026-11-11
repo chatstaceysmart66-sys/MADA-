@@ -31,14 +31,14 @@
 
 - Package: `com.abdullahlazim.openworldgame`.
 - ABI المستهدف: ARM64 فقط في إعدادات المشروع.
-- Minimum SDK: 26؛ Target SDK: 35 كما في وثيقة المصدر المرفقة، ويجب إعادة مراجعة القيم الرسمية وقت التغليف.
+- Minimum install SDK: 26؛ SDK platforms 34 و35 وBuild Tools 35.0.1 مثبتة الآن داخل `/workspaces/.toolchains/android-sdk` حسب إعداد المحرك المرجعي؛ راجع إعدادات UE عند التغليف.
 - Landscape، Vulkan مفعّل كمسار إعداد.
 - `ExtraPermissions=` فارغ ولا توجد صلاحية INTERNET مضافة.
-- هذه إعدادات ملفات وليست إثباتاً أن Android packaging ناجح.
+- NDK r27c وPlatform Tools 37.0.1 وMicrosoft JDK 21.0.3 مثبتة خارج Git؛ جرى فحص ARM64 compiler probe. هذه ليست إثباتاً لنجاح Unreal Android packaging.
 
 ## الاعتماديات والإضافات
 
-- Build.cs يعتمد `Core`, `CoreUObject`, `Engine`, `PhysicsCore`, `InputCore`, `UMG`, `Slate`, و`SlateCore`.
+- Build.cs يعتمد `Core`, `CoreUObject`, `Engine`, `RHI`, `PhysicsCore`, `InputCore`, `UMG`, `Slate`, و`SlateCore`؛ أضيف `RHI` لاستعلام Frame Pacer، ولم يُتحقق من تجميعه داخل UE 5.8.
 - لا توجد Plugins خارجية مفعّلة في `.uproject` الحالي.
 - لم تُنسخ إعدادات تمكين `ChaosVehiclesPlugin` أو `EnhancedInput` من scaffold لأنها غير مستخدمة في نظام المصدر الحالي؛ المركبة ليست Chaos Vehicle ونظام الإدخال الحالي يستخدم InputCore. لا ينبغي تفعيل Plugin دون إدماج فعلي وبناء بالمحرك.
 - ملفات `.generated.h` تُنتجها UnrealHeaderTool ولا توجد ضمن المصدر الخام.
@@ -57,3 +57,17 @@
 ## ما لا يمكن حسمه دون Unreal/Android
 
 UHT، ترجمة/ربط C++ عبر UnrealBuildTool، توفر Engine Basic Shapes بعد Android Cook، صلاحية مراجع الأصول، فتح القائمة وتشغيل الأزرار، الفيزياء وPossess في Runtime، التغليف والتوقيع، تثبيت APK، Offline mode على هاتف، اللمس، FPS/CPU/GPU/RAM/الحرارة.
+
+## متابعة التدقيق — 2026-11-11
+
+- الأساس: `ced4a05` على `main`، مجلد العمل `OpenWorldGame_Merged_v0.2`.
+- `python3 Scripts/validate_project.py`: PASS؛ `python3 Scripts/audit_files.py`: PASS 27/27؛ Python integrity: PASS 16/16؛ C++ host: PASS 42/42.
+- فحص ملفات المحتوى لا يجد `.umap` أو `.uasset` أو `.uplugin` أو `MADA_Final_Android_ARM64.apk`. العالم الحالي Greybox منشأ من C++ وليس خريطة مدينة/ريف نهائية.
+- Unreal/Android: BLOCKED لغياب UnrealEditor/UBT وAndroid SDK/NDK وADB والجهاز. إضافة RHI وتدفق تأكيد الحفظ لم يُختبرا بالمحرك.
+
+## تدقيق Codespaces — 2026-11-11
+
+- Android SDK/NDK/JDK الآن مثبتة خارج المستودع في `/workspaces/.toolchains`; التفاصيل في `Docs/BUILD_ENVIRONMENT_REPORT.txt`.
+- `adb` موجود لكن لا يوجد جهاز في `adb devices -l`. Android ARM64 NDK probe نجح، دون إنشاء APK.
+- Unreal Engine/UBT/RunUAT ما زالت غير موجودة؛ `EpicGames/UnrealEngine` غير متاح لحساب GitHub الحالي. لا توجد ملفات `.umap` أو `.uasset` أو `.uplugin` أو APK بالمشروع.
+- لم يتغير الحكم: UHT/UBT/cook/package/device tests BLOCKED/NOT RUN.

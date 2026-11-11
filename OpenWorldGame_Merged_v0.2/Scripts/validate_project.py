@@ -7,6 +7,7 @@ or real-device gameplay/performance tests.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -137,7 +138,15 @@ def main() -> int:
     for item in WARNINGS:
         print(f"WARNING: {item}")
     print("ENGINE COMPILE: NOT RUN (Unreal Engine 5.8 is not installed in this environment)")
-    print("ANDROID APK: NOT BUILT (Android packaging toolchain/device is not available here)")
+    sdk_root = Path(os.environ.get("ANDROID_SDK_ROOT") or os.environ.get("ANDROID_HOME", ""))
+    ndk_root = Path(os.environ.get("NDKROOT", ""))
+    sdk_ready = (sdk_root / "platforms" / "android-35").is_dir()
+    ndk_ready = (ndk_root / "source.properties").is_file()
+    if sdk_ready and ndk_ready:
+        print("ANDROID SDK/NDK: DETECTED (SDK Platform 35 and NDK path; packaging not tested)")
+    else:
+        print("ANDROID SDK/NDK: NOT DETECTED (set ANDROID_SDK_ROOT and NDKROOT to inspect the installed toolchain)")
+    print("ANDROID APK: NOT BUILT (this static validator does not run Unreal cook or package commands)")
     return 1 if ERRORS else 0
 
 

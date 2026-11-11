@@ -1,13 +1,44 @@
-Build environment inspection — merge session 2026-11-11
-OS/kernel: Linux x86_64 container (kernel 6.18.57)
-Compiler: g++ 13.3.0 (directly verified in follow-up execution)
-Python: 3.13.5
-Java: OpenJDK 21.0.12.1
-Git: 2.47.3
-UnrealEditor: not found in PATH
-UnrealBuildTool: not found in PATH
-adb: not found in PATH
-Gradle: available at /usr/local/sdkman/candidates/gradle/current/bin/gradle
-Android SDK/NDK: not detected in the merge environment
-Physical Android device: not available to this environment
-Follow-up verification: Java 21 and Gradle are available, but Android SDK/NDK, ADB, Unreal Editor/Build Tool, and a physical Android device are unavailable. Host-side tests/static audits only; Unreal compile and Android package/install remain BLOCKED/NOT RUN. This supersedes the earlier Gradle-not-found and compiler-version observations for the current container state.
+Codespaces environment inspection — 2026-11-11
+
+## Machine and persistent storage
+
+- Working directory: `/workspaces/MADA-/OpenWorldGame_Merged_v0.2`; current project base commit: `ced4a05`.
+- OS: Ubuntu 24.04.5 LTS, Linux x86_64, kernel `6.8.0-1070-azure`, glibc 2.39.
+- CPU: AMD EPYC 7763, 2 vCPU; RAM 7.8 GiB total, about 5.1 GiB available at inspection; no swap.
+- Persistent `/workspaces` filesystem: `/dev/loop4`, 32 GiB total. Free before tool install: 19 GiB; after install: 16 GiB.
+- `/workspaces/.toolchains`: 3.3 GiB; outside Git and on the persistent `/workspaces` mount.
+- No Codespaces plan or billing upgrade was requested or performed.
+
+## GPU, network, and host tools
+
+- `/dev/dri/card0` reports Microsoft Hyper-V DRM (`vendor 0x1414`, `device 0x6`); no NVIDIA device or `nvidia-smi`, and no `vulkaninfo`, `glxinfo`, or `eglinfo`. No compatible Unreal visual/profiling GPU is verified.
+- HTTP HEAD checks to Epic documentation and Google Android repository succeeded. This does not imply access to authenticated Epic binaries.
+- Host compiler: g++ 13.3.0; Python 3.13.5; Git 2.47.3; Gradle available at `/usr/local/sdkman/candidates/gradle/current/bin/gradle`.
+- The pre-existing default Java is OpenJDK 25; the UE/Android environment below pins JDK 21.0.3.
+
+## Android toolchain installed
+
+Persistent root: `/workspaces/.toolchains/android-sdk`; JDK: `/workspaces/.toolchains/jdk/21.0.3`; download cache: `/workspaces/.toolchains/download-cache`.
+
+| Component | Installed version | Download bytes | Verification / path |
+|---|---:|---:|---|
+| Microsoft OpenJDK | 21.0.3+9 | 206,875,409 | Official SHA-256 `b535a58db80aeb5cc0d5e85ae6cb3f621d7f269ca1b36832f1aed3842cede4f4`; installed `/workspaces/.toolchains/jdk/21.0.3` |
+| Android command-line tools | CLI 1.1.16717390; package lists 23.0.0 | 181,052,239 | Google SHA-1 `e025545c62a8e64c7559119566a569fb1dec5f60`; local SHA-256 `0877a1d048fe4a24efe2eff536ca4223f7adeb58648bb81909d33c446918cfa8` |
+| Android platform-tools | 37.0.1 | 9,054,187 | Archive SHA-1 `477254aa5f903c15cf51001717bdf347fb6b53e0`; `adb` 1.0.41; no device |
+| Android SDK Platform | 34 revision 3.0.0 | 63,180,081 | `platform-34-ext7_r03.zip`; SHA-1 `1f2e9478d6a7601425ceaa553311dc43191f103d` |
+| Android SDK Platform | 35 revision 2.0.0 | 64,273,788 | `platform-35_r02.zip`; SHA-1 `0bb560a90a7a2cbd0dd8348224d518b638fe7949` |
+| Android Build Tools | 35.0.1 | 61,959,297 | SHA-1 `e009a9b188cfeb1d2b4c318ab5cb4f1ddc368861`; installed under `android-sdk/build-tools/35.0.1` |
+| Android NDK | r27c / 27.2.12479018 | 663,987,688 | Official Google SHA-1 `090e8083a715fdb1a3e402d0763c388abb03fb4e` |
+
+Combined SDK/CLI download size was about 1.04 GB; including JDK about 1.25 GB. Extracted toolchain plus cached archives occupies 3.3 GiB. SDK packages were installed through Google's CLI; `sdkmanager --licenses` reports the option is no longer needed, and the SDK license file is present.
+
+Source `/workspaces/.toolchains/env.sh` to set `JAVA_HOME`, `ANDROID_HOME`, `ANDROID_SDK_ROOT`, `NDKROOT`, `ANDROID_NDK_HOME`, and `PATH`.
+
+Verification: Java/Javac 21.0.3, NDK `Pkg.Revision = 27.2.12479018`, Android clang 18.0.3, ADB 1.0.41, AAPT2 2.19-12874835; a stdin-only `aarch64-linux-android26-clang -fsyntax-only` probe passed. `adb devices -l` returned no devices.
+
+## Unreal / APK blockers
+
+- UnrealEditor, UnrealBuildTool, and RunUAT are not installed. `gh repo view EpicGames/UnrealEngine` returned “Could not resolve to a Repository”; an official installed build requires Epic account authorization. No credentials were requested and no unofficial binary was considered.
+- Epic's Linux quickstart recommends Ubuntu 22.04, 32 GiB RAM, and a GeForce 2080-class GPU with 8 GiB graphics memory. This host is Ubuntu 24.04, 7.8 GiB RAM, 2 vCPU, and only a Hyper-V display adapter. The engine archive's authenticated size could not be established; no UE download or source build was started.
+- Unreal UHT/UBT, Android cooking/package, APK install, and runtime tests remain BLOCKED / NOT RUN. No APK, source archive, APK signature, or APK checksum exists.
+- No physical Android device is attached; airplane-mode, touch, performance, and thermal tests remain BLOCKED.

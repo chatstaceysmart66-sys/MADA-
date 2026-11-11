@@ -5,20 +5,22 @@ ST-003,Source,Local OWG Core SaveSystem includes resolve,PASS,Docs/logs/file_aud
 ST-004,Input,Axis and Action mappings match C++ bindings,PASS,Scripts/validate_project.py,Static names comparison
 ST-005,Branding,MADA metadata and startup/menu source wiring,PASS,Tests/test_project_integrity.py,Static source/config check; not Unreal Runtime validation
 ST-006,Gameplay UI,Pause menu is wired to Escape and touch with resume/save,PASS,Tests/test_project_integrity.py,Static source/config check only; Unreal pause behavior not run
-ST-007,Progression,New Game deletes save and reloads current level; Continue is separate,PASS,Tests/test_project_integrity.py,Static source/config check only; level travel not run
+ST-007,Progression,New Game requests confirmation before replacing an existing save; Continue is separate,PASS,Tests/test_project_integrity.py,Static source/config check only; confirmation interaction and level travel not run
+ST-008,Progression,New Game confirmation and cancel buttons are wired; cancel returns to menu,PASS,Tests/test_project_integrity.py,Static source wiring only; existing-save behavior not run in Unreal
 HOST-001,C++,Engine-independent core logic tests,PASS,Docs/logs/host_tests.log,42/42 with g++ C++17; not Unreal tests
 HOST-002,C++,ASan and UBSan host tests,PASS,Docs/logs/host_tests_sanitized.log,42/42; host-only
-PY-001,Python,Project integrity tests,PASS,Docs/PYTHON_TEST_RESULTS.txt,14/14
+PY-001,Python,Project integrity tests,PASS,Docs/PYTHON_TEST_RESULTS.txt,17/17
 AUD-001,Project,Static file and dependency audit,PASS,Docs/logs/file_audit.log,27/27
 UE-001,Build,UnrealHeaderTool completes,BLOCKED,,Requires Unreal Engine 5.8
-UE-002,Build,OpenWorldGameEditor Win64 Development build,BLOCKED,,Requires UE 5.8 and matching toolchain
+UE-002,Build,OpenWorldGameEditor Linux Development build,BLOCKED,,Requires UE 5.8 and matching toolchain
 UE-003,Runtime,PIE reaches menu and all buttons work,NOT RUN,,Requires Unreal Editor
 GAME-001,Character,Walk sprint jump camera touch input,NOT RUN,,Requires runtime/device test
 GAME-002,Vehicle,Physics/throttle/brake/steering,NOT RUN,,Rigid-body source prototype only
 GAME-003,Vehicle,Enter/exit and safe possession,NOT RUN,,Pure logic host-tested; Unreal Runtime not tested
 SAVE-001,Offline,USaveGame save/load after app restart,BLOCKED,,Requires UE Runtime/Android build/device
-AND-001,Android,arm64 Shipping APK package,BLOCKED,,UE and SDK/NDK unavailable
-AND-002,Android,Install and launch on physical phone,BLOCKED,,No APK/ADB/device available
+TOOL-001,Android,NDK ARM64 Clang syntax probe,PASS,Docs/TEST_REPORT.md,"aarch64-linux-android26-clang stdin probe; toolchain only, no APK"
+AND-001,Android,arm64 Shipping APK package,BLOCKED,,Unreal Engine/UBT unavailable; SDK/NDK installed
+AND-002,Android,Install and launch on physical phone,BLOCKED,,No APK and no physical Android device; ADB is installed
 AND-003,Offline,Airplane mode gameplay test,BLOCKED,,Requires physical Android device
 PERF-001,Performance,Measured FPS CPU GPU RAM thermal test,BLOCKED,,No build or named device
 ASSET-001,Licenses,Third-party asset license verification,PASS,,No external assets are included

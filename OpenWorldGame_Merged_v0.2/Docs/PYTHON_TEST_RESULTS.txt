@@ -23,3 +23,31 @@ Command: python3 -m unittest discover -s Tests -v
 Result: PASS, 15/15 tests.
 Additional test: test_frame_cap_menu_uses_platform_supported_options
 The full command output is represented in Docs/TEST_REPORT.md; this file's earlier detailed output is retained as historical evidence.
+
+Follow-up after adding New Game save confirmation: PASS, 16/16 tests.
+Command: python3 -m unittest discover -s Tests -v
+
+Latest follow-up: 2026-11-11, PASS 17/17 after adding SDK/NDK detection to static validator.
+Command: python3 -m unittest discover -s Tests -v
+test_android_configuration_is_present (test_project_integrity.ProjectIntegrityTests.test_android_configuration_is_present) ... ok
+test_core_runtime_flow_is_connected (test_project_integrity.ProjectIntegrityTests.test_core_runtime_flow_is_connected) ... ok
+test_engine_independent_core_is_integrated (test_project_integrity.ProjectIntegrityTests.test_engine_independent_core_is_integrated) ... ok
+test_frame_cap_menu_uses_platform_supported_options (test_project_integrity.ProjectIntegrityTests.test_frame_cap_menu_uses_platform_supported_options) ... ok
+test_frame_rate_limit_is_persisted_locally (test_project_integrity.ProjectIntegrityTests.test_frame_rate_limit_is_persisted_locally) ... ok
+test_host_core_test_sources_cover_save_migration (test_project_integrity.ProjectIntegrityTests.test_host_core_test_sources_cover_save_migration) ... ok
+test_mada_branding_is_configured_for_startup_and_menu (test_project_integrity.ProjectIntegrityTests.test_mada_branding_is_configured_for_startup_and_menu) ... ok
+test_new_game_requires_confirmation_before_replacing_existing_save (test_project_integrity.ProjectIntegrityTests.test_new_game_requires_confirmation_before_replacing_existing_save) ... ok
+test_new_game_resets_save_and_restarts_current_level (test_project_integrity.ProjectIntegrityTests.test_new_game_resets_save_and_restarts_current_level) ... ok
+test_offline_permissions_and_mobile_render_config (test_project_integrity.ProjectIntegrityTests.test_offline_permissions_and_mobile_render_config) ... ok
+test_pause_menu_has_keyboard_and_touch_paths (test_project_integrity.ProjectIntegrityTests.test_pause_menu_has_keyboard_and_touch_paths) ... ok
+test_project_descriptor_is_valid (test_project_integrity.ProjectIntegrityTests.test_project_descriptor_is_valid) ... ok
+test_required_gameplay_sources_exist (test_project_integrity.ProjectIntegrityTests.test_required_gameplay_sources_exist) ... ok
+test_required_ummg_handlers_are_declared_and_implemented (test_project_integrity.ProjectIntegrityTests.test_required_ummg_handlers_are_declared_and_implemented) ... ok
+test_static_validator_does_not_conflate_android_sdk_with_apk_build (test_project_integrity.ProjectIntegrityTests.test_static_validator_does_not_conflate_android_sdk_with_apk_build) ... ok
+test_static_validator_passes (test_project_integrity.ProjectIntegrityTests.test_static_validator_passes) ... ok
+test_unreal_and_apk_are_not_misreported_as_built (test_project_integrity.ProjectIntegrityTests.test_unreal_and_apk_are_not_misreported_as_built) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.089s
+
+OK

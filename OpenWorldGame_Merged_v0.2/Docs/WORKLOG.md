@@ -1,4 +1,20 @@
 # Worklog — merged v0.2
+## 2026-11-11 — prepare Android tools in Codespaces
+
+- Inspected the active Codespace before downloading: persistent `/workspaces` was 32 GiB total with 19 GiB free; 2 vCPU, 7.8 GiB RAM, Ubuntu 24.04.5, glibc 2.39, and Hyper-V DRM with no verified 3D GPU.
+- Installed Microsoft JDK 21.0.3 and Google Android SDK/NDK in `/workspaces/.toolchains`, outside Git. Installed SDK 34/35, Build Tools 35.0.1, Platform Tools 37.0.1, and NDK r27c. Post-install free space: 16 GiB; toolchain directory: 3.3 GiB.
+- Verified JDK SHA-256, Google command-line tools SHA-1, Java/Javac, ADB, AAPT2, NDK revision, ARM64 Clang syntax probe; no attached device found.
+- Added `/workspaces/.toolchains/env.sh`; source it to set Java/SDK/NDK variables in a terminal.
+- UE remains blocked: Unreal tools absent, Epic source repo inaccessible to the current GitHub identity, current host below Epic Linux quickstart recommendations. No engine download, APK, or device test was attempted.
+
+## 2026-11-11 — protect existing progress on New Game
+
+- Base state verified at `ced4a05` on `main`; working tree was clean before this task. No commit or push was performed in this execution.
+- Added `UOWGGameInstance::HasProgressSave()` and an Arabic UMG confirmation panel when a save slot exists. Confirm starts the existing reset/travel flow; Cancel returns to the menu without calling it; a missing save starts directly.
+- Added a Python integration test for save detection, confirmation visibility, and Confirm/Cancel button bindings.
+- Validation from `OpenWorldGame_Merged_v0.2`: `python3 Scripts/validate_project.py` PASS; `python3 Scripts/audit_files.py` PASS 27/27; `python3 -m unittest discover -s Tests -v` PASS 16/16; `bash Scripts/run_host_tests.sh` PASS 42/42; `git diff --check` PASS.
+- Unreal Engine/UBT, Android SDK/NDK, ADB, physical device, and Blender are unavailable. UHT, PIE interaction, Android APK, and device checks remain BLOCKED/NOT RUN. No `.umap`, `.uasset`, APK, or source archive was created.
+- Next exact action: on an Unreal Engine 5.8 workstation, compile the Editor target, then test New Game with a valid save (Cancel preserves; Confirm replaces), no save, and failed level travel before expanding to vehicle/world work.
 
 ## 2026-11-11 — official MADA branding and startup screen
 

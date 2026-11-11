@@ -107,6 +107,33 @@ void UOWGMainMenuWidget::NativeConstruct()
     MainMenuPanel->AddChildToVerticalBox(FrameCapLabel);
     SyncFrameCapSelection();
 
+    NewGameConfirmationPanel = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("NewGameConfirmationPanel"));
+    UCanvasPanelSlot* NewGameConfirmationSlot = RootCanvas->AddChildToCanvas(NewGameConfirmationPanel);
+    NewGameConfirmationSlot->SetAnchors(FAnchors(0.5f, 0.5f));
+    NewGameConfirmationSlot->SetAlignment(FVector2D(0.5f, 0.5f));
+    NewGameConfirmationSlot->SetAutoSize(true);
+
+    UTextBlock* NewGameConfirmationText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("NewGameConfirmationText"));
+    NewGameConfirmationText->SetText(FText::FromString(TEXT("سيتم حذف الحفظ الحالي. هل تريد بدء لعبة جديدة؟")));
+    NewGameConfirmationText->SetJustification(ETextJustify::Center);
+    NewGameConfirmationPanel->AddChildToVerticalBox(NewGameConfirmationText);
+
+    UButton* ConfirmNewGameButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("ConfirmNewGameButton"));
+    UTextBlock* ConfirmNewGameText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
+    ConfirmNewGameText->SetText(FText::FromString(TEXT("حذف الحفظ والبدء")));
+    ConfirmNewGameText->SetJustification(ETextJustify::Center);
+    ConfirmNewGameButton->AddChild(ConfirmNewGameText);
+    NewGameConfirmationPanel->AddChildToVerticalBox(ConfirmNewGameButton);
+    ConfirmNewGameButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleNewGameConfirmed);
+
+    UButton* CancelNewGameButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("CancelNewGameButton"));
+    UTextBlock* CancelNewGameText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
+    CancelNewGameText->SetText(FText::FromString(TEXT("إلغاء")));
+    CancelNewGameText->SetJustification(ETextJustify::Center);
+    CancelNewGameButton->AddChild(CancelNewGameText);
+    NewGameConfirmationPanel->AddChildToVerticalBox(CancelNewGameButton);
+    CancelNewGameButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleNewGameCancelled);
+
     PausePanel = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("PausePanel"));
     UCanvasPanelSlot* PauseSlot = RootCanvas->AddChildToCanvas(PausePanel);
     PauseSlot->SetAnchors(FAnchors(0.5f, 0.5f));
@@ -196,6 +223,7 @@ void UOWGMainMenuWidget::NativeConstruct()
     bGameStarted = false;
     StartupPanel->SetVisibility(ESlateVisibility::Visible);
     MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
+    NewGameConfirmationPanel->SetVisibility(ESlateVisibility::Collapsed);
     PausePanel->SetVisibility(ESlateVisibility::Collapsed);
     FootInteractButton->SetVisibility(ESlateVisibility::Collapsed);
     JumpButton->SetVisibility(ESlateVisibility::Collapsed);
@@ -391,10 +419,46 @@ void UOWGMainMenuWidget::HandleResumeClicked()
 
 void UOWGMainMenuWidget::HandleNewGameClicked()
 {
+    UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance());
+    if (!GameInstance)
+    {
+        SetStatusMessage(FText::FromString(TEXT("تعذر بدء لعبة جديدة في هذا المستوى")));
+        return;
+    }
+
+    if (GameInstance->HasProgressSave())
+    {
+        MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
+        StartupBackdrop->SetVisibility(ESlateVisibility::Visible);
+        NewGameConfirmationPanel->SetVisibility(ESlateVisibility::Visible);
+        return;
+    }
+
+    BeginNewGameTransition();
+}
+
+void UOWGMainMenuWidget::HandleNewGameConfirmed()
+{
+    NewGameConfirmationPanel->SetVisibility(ESlateVisibility::Collapsed);
+    BeginNewGameTransition();
+}
+
+void UOWGMainMenuWidget::HandleNewGameCancelled()
+{
+    NewGameConfirmationPanel->SetVisibility(ESlateVisibility::Collapsed);
+    StartupBackdrop->SetVisibility(ESlateVisibility::Collapsed);
+    MainMenuPanel->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UOWGMainMenuWidget::BeginNewGameTransition()
+{
     if (UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
     {
         if (GameInstance->StartNewGame()) return;
     }
+
+    StartupBackdrop->SetVisibility(ESlateVisibility::Collapsed);
+    MainMenuPanel->SetVisibility(ESlateVisibility::Visible);
     SetStatusMessage(FText::FromString(TEXT("تعذر بدء لعبة جديدة في هذا المستوى")));
 }
 
@@ -403,6 +467,7 @@ void UOWGMainMenuWidget::HandleStartClicked()
     bGameStarted = true;
     bPauseMenuVisible = false;
     MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
+    NewGameConfirmationPanel->SetVisibility(ESlateVisibility::Collapsed);
     PausePanel->SetVisibility(ESlateVisibility::Collapsed);
     if (APlayerController* PC = GetOwningPlayer())
     {

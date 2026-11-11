@@ -18,3 +18,5 @@ bash Scripts/run_host_tests.sh
 ```
 
 These checks do not replace a real Unreal Engine 5.8 build or Android device validation.
+
+In the current Codespace, Android SDK/NDK/JDK are installed outside the repository at `/workspaces/.toolchains`. Run `source /workspaces/.toolchains/env.sh` to configure the current terminal. Unreal Engine 5.8 is not installed, so no APK build is currently possible; see `Docs/BUILD_ENVIRONMENT_REPORT.txt`.

@@ -29,6 +29,7 @@ private:
     void SyncFrameCapSelection();
     void RefreshSupportedFrameCaps();
     void UpdateFrameCapLabel();
+    void BeginNewGameTransition();
 
     UFUNCTION()
     void HandleStartupContinueClicked();
@@ -38,6 +39,10 @@ private:
     void HandleResumeClicked();
     UFUNCTION()
     void HandleNewGameClicked();
+    UFUNCTION()
+    void HandleNewGameConfirmed();
+    UFUNCTION()
+    void HandleNewGameCancelled();
     UFUNCTION()
     void HandleStartClicked();
     UFUNCTION()
@@ -85,6 +90,8 @@ private:
     TObjectPtr<UVerticalBox> MainMenuPanel;
     UPROPERTY()
     TObjectPtr<UVerticalBox> PausePanel;
+    UPROPERTY()
+    TObjectPtr<UVerticalBox> NewGameConfirmationPanel;
     UPROPERTY()
     TObjectPtr<UTextBlock> StatusText;
     UPROPERTY()

@@ -12,15 +12,20 @@
 
 **الحالة:** مشروع MADA مصدر أولي، وليس لعبة مكتملة ولا APK. تظهر هوية MADA والاعتماد «تطوير: عبدالله لازم» في شاشة افتتاح نصية والقائمة؛ لم تُختبر الواجهة داخل Unreal Runtime.
 
-## طريقة فتح المشروع على Windows
+## أدوات Android في Codespaces
 
-1. ثبّت إصدار Unreal Engine 5.8.
-2. فك ضغط مجلد `OpenWorldGame_Merged_v0.2` إلى مسار قصير.
-3. افتح `OpenWorldGame.uproject` باستخدام Unreal Engine 5.8.
-4. اسمح للمحرّك بتوليد ملفات المشروع، ثم ابنِ `OpenWorldGameEditor` عبر toolchain المطابق لإصدار Unreal.
-5. افتح المحرر واضغط Play لفحص النموذج التجريبي.
-6. بعد نجاح بناء المحرر، جهّز Android SDK/NDK/JDK حسب وثائق UE 5.8 ثم ابنِ Android arm64-v8a.
-7. لا تعتبر APK جاهزاً حتى تثبته على هاتف حقيقي وتختبر التشغيل في وضع الطيران واللمس والحفظ.
+الأدوات مثبتة خارج Git على تخزين Codespaces الدائم. فعّلها في كل طرفية جديدة:
+
+```bash
+source /workspaces/.toolchains/env.sh
+java --version
+sdkmanager --list_installed
+adb devices -l
+```
+
+المثبت: Microsoft JDK 21.0.3، SDK Platforms 34/35، Build Tools 35.0.1، Platform Tools 37.0.1، وNDK r27c. راجع `Docs/BUILD_ENVIRONMENT_REPORT.txt` للمسارات والبصمات والقياسات.
+
+Unreal Engine 5.8 وUBT غير مثبتين في Codespace الحالي؛ لذلك لا يمكن فتح/بناء المشروع أو تغليفه إلى APK هنا الآن. لا يتطلب هذا الإعداد تثبيت Unreal أو Android على جهاز Windows المحلي.
 
 ## الفحوص المتاحة
 
@@ -73,7 +78,7 @@ bash Scripts/run_host_tests.sh
 - لا توجد شخصية Mesh أو حركات نهائية أو موسيقى أو أصوات أو مشهد سينمائي.
 - لا يوجد عالم مدينة/ريف فعلي أو World Partition/Streaming أو NPC/مرور/مهام.
 - ملف `Source/OpenWorldGame/SaveSystem/OWSaveData.h` نموذج حفظ محمول مستقل لاختبار التحقق والترحيل؛ الحفظ داخل اللعبة حالياً يستخدم `USaveGame` في `OWGSaveGame.h`.
-- مساعدات حد FPS المستقلة تُختبر على المضيف؛ واجهة اللعبة الحالية تعرض Auto/30/40/60 فقط، ولا تدّعي كشف Refresh Rate الجهاز أو دعم 90/120.
-- Unreal 5.8 وAndroid SDK/NDK وADB غير متوفرة في بيئة الدمج؛ لم يتم Compile أو Package أو Install أو Playtest.
+- واجهة حد FPS ترشح 30/40/45/60/90/120 عبر Frame Pacer، مع Auto؛ هذا الربط مختبر ساكناً فقط ولم يُبنَ أو يُختبر على جهاز Android، ولا يعرض Refresh Rate فعلياً.
+- Android SDK/NDK/JDK مثبتة داخل Codespaces، لكن Unreal 5.8/UBT غير متاحين، ولا يوجد جهاز فعلي متصل؛ لم يتم Compile أو Package أو Install أو Playtest.
 
 راجع `Docs/IMPLEMENTATION_STATUS_AR.md` و`Docs/KNOWN_ISSUES_AR.md` و`Docs/BUILD_REPORT.md` قبل أي تسليم.

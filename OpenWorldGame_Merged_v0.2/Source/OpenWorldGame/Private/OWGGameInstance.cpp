@@ -25,6 +25,11 @@ bool UOWGGameInstance::StartNewGame()
     return true;
 }
 
+bool UOWGGameInstance::HasProgressSave() const
+{
+    return UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0);
+}
+
 bool UOWGGameInstance::ConsumeStartNewGameAfterTravel()
 {
     const bool bShouldStart = bStartNewGameAfterTravel;

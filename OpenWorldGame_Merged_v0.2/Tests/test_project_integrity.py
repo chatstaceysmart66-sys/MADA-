@@ -73,6 +73,19 @@ class ProjectIntegrityTests(unittest.TestCase):
         self.assertIn("ConsumeStartNewGameAfterTravel()", widget)
         self.assertIn("HandleNewGameClicked", widget)
 
+    def test_new_game_requires_confirmation_before_replacing_existing_save(self):
+        game_instance = (ROOT / "Source/OpenWorldGame/Private/OWGGameInstance.cpp").read_text(encoding="utf-8")
+        widget = (ROOT / "Source/OpenWorldGame/Private/OWGMainMenuWidget.cpp").read_text(encoding="utf-8")
+        self.assertIn("bool UOWGGameInstance::HasProgressSave() const", game_instance)
+        self.assertIn("if (GameInstance->HasProgressSave())", widget)
+        self.assertIn("HandleNewGameConfirmed", widget)
+        self.assertIn("HandleNewGameCancelled", widget)
+        self.assertIn("ConfirmNewGameButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleNewGameConfirmed)", widget)
+        self.assertIn("CancelNewGameButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleNewGameCancelled)", widget)
+        self.assertIn("NewGameConfirmationPanel->SetVisibility(ESlateVisibility::Visible)", widget)
+        self.assertIn("MainMenuPanel->SetVisibility(ESlateVisibility::Visible)", widget)
+        self.assertIn("void UOWGMainMenuWidget::BeginNewGameTransition()", widget)
+
     def test_required_gameplay_sources_exist(self):
         required = [
             "Source/OpenWorldGame/Private/OWGCharacter.cpp",
@@ -96,6 +109,16 @@ class ProjectIntegrityTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
         self.assertIn("STATIC INTEGRITY: PASS", result.stdout)
+
+    def test_static_validator_does_not_conflate_android_sdk_with_apk_build(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "Scripts/validate_project.py")],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertIn("ANDROID APK: NOT BUILT (this static validator does not run Unreal cook or package commands)", result.stdout)
 
     def test_unreal_and_apk_are_not_misreported_as_built(self):
         report = (ROOT / "Docs/IMPLEMENTATION_STATUS_AR.md").read_text(encoding="utf-8")

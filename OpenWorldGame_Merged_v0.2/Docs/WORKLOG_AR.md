@@ -1,4 +1,23 @@
 # سجل التنفيذ — MADA
+## 2026-11-11 — إعداد Android toolchain في Codespaces
+
+- **الموارد قبل التنزيل:** Ubuntu 24.04.5، kernel 6.8.0-1070-azure، glibc 2.39، 2 vCPU، RAM ‏7.8 GiB، و19 GiB متاحة على mount `/workspaces` الدائم؛ لا ترقية مدفوعة.
+- **التثبيت خارج Git:** Microsoft JDK 21.0.3+9، Google command-line tools، SDK 34/35، Build Tools 35.0.1، Platform Tools 37.0.1، NDK r27c / 27.2.12479018. `/workspaces/.toolchains` حجمه 3.3 GiB وبعده بقي 16 GiB.
+- **التحقق:** JDK/NDK/ADB/AAPT2 نسخها موثقة في `Docs/BUILD_ENVIRONMENT_REPORT.txt`؛ checksum JDK الرسمي متطابق، Google CLI SHA-1 تحقق، وARM64 Clang stdin syntax probe PASS. `adb devices -l` بلا أجهزة.
+- **البيئة:** `source /workspaces/.toolchains/env.sh` يضبط Java/SDK/NDK/PATH. لا حاجة إلى تثبيت محلي على Windows.
+- **مانع المحرك:** UnrealEditor/UBT/RunUAT غير موجودة؛ وصول GitHub الحالي إلى EpicGames/UnrealEngine مرفوض، وتنزيل Installed Build يتطلب Epic login. Epic توصي بـUbuntu 22.04 و32 GiB RAM وGPU بذاكرة 8 GiB؛ المضيف الحالي أقل من ذلك. لم يُنزّل محرك أو مصدر غير رسمي.
+- **النتيجة:** Android compiler جاهز كأداة مستقلة فقط؛ لا Unreal build أو APK أو اختبار جهاز. المشروع INCOMPLETE.
+- **تحديث التحقق:** عُدّل `Scripts/validate_project.py` لتمييز وجود SDK/NDK عن تغليف APK؛ Python integrity PASS 17/17، ويعرض SDK Platform 35 وNDK مكتشفين عند تحميل env script.
+- **الخطوة التالية الدقيقة:** توفير/تفعيل وصول Epic رسميًا ومحطة Codespaces بموارد UE المدعومة ومساحة مثبتة تكفي Installed Build، ثم بناء Editor target قبل Android package. لا تطلب بيانات اعتماد عبر المحادثة.
+
+## 2026-11-11 — حماية الحفظ قبل New Game
+
+- **الحالة عند البدء:** `main` عند `ced4a05`، متزامن مع `origin/main`، وشجرة العمل نظيفة. لا Unreal Engine/UBT أو Android SDK/NDK أو ADB أو جهاز Android.
+- **التغيير:** أضيف `HasProgressSave()` ونافذة تأكيد عربية عند وجود حفظ. التأكيد وحده يستدعي تدفق حذف الحفظ/إعادة تحميل المستوى؛ الإلغاء يغلق النافذة ويعيد القائمة؛ لا يُطلب تأكيد إذا لم يوجد حفظ.
+- **التحقق:** validator PASS؛ file audit 27/27؛ Python integrity 16/16؛ C++ host 42/42؛ `git diff --check` PASS؛ فحص الأخطاء للمصادر المتغيرة لا يعرض أخطاء.
+- **القيود:** هذه نتائج ساكنة/مضيف فقط؛ لا دليل Unreal Runtime أو حفظ فعلي. لا خرائط/أصول `.umap`/`.uasset` في المشروع، ولا APK.
+- **الخطوة التالية الدقيقة:** على محطة UE 5.8، ابنِ Editor target، ثم اختبر New Game مع slot موجود (إلغاء يحفظه، تأكيد يحذفه)، بلا slot، وفشل OpenLevel. بعد ذلك عالج بوابة المركبة/الخريطة وفق توافر أصول وأدوات مرخصة.
+
 ## 2026-11-11 — متابعة في حاوية الدمج
 
 - **الحالة عند البدء:** `main`، commit `179478d`، دون تغييرات سابقة غير ملتزمة. المشروع الفعلي في `OpenWorldGame_Merged_v0.2/`.
