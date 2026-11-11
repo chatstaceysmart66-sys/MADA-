@@ -1,1 +1,2 @@
 Device,Android,SoC,GPU,RAM,DisplayHz,GraphicsPreset,FrameCap,MeasuredFPS,StartTemperature,EndTemperature,MemoryMB,DurationMinutes,Status,Evidence
+NOT_AVAILABLE,NOT_RUN,NOT_AVAILABLE,NOT_AVAILABLE,NOT_AVAILABLE,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,BLOCKED,"No physical Android device or ADB is available in this environment"

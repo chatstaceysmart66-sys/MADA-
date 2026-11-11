@@ -1,13 +1,13 @@
 Build environment inspection — merge session 2026-11-11
 OS/kernel: Linux x86_64 container (kernel 6.18.57)
-Compiler: g++ 14.2.0
+Compiler: g++ 13.3.0 (directly verified in follow-up execution)
 Python: 3.13.5
 Java: OpenJDK 21.0.12.1
 Git: 2.47.3
 UnrealEditor: not found in PATH
 UnrealBuildTool: not found in PATH
 adb: not found in PATH
-Gradle: not found in PATH
+Gradle: available at /usr/local/sdkman/candidates/gradle/current/bin/gradle
 Android SDK/NDK: not detected in the merge environment
 Physical Android device: not available to this environment
-Result: host-side code tests and static project audits only; Unreal compile and Android package/install remain BLOCKED/NOT RUN.
+Follow-up verification: Java 21 and Gradle are available, but Android SDK/NDK, ADB, Unreal Editor/Build Tool, and a physical Android device are unavailable. Host-side tests/static audits only; Unreal compile and Android package/install remain BLOCKED/NOT RUN. This supersedes the earlier Gradle-not-found and compiler-version observations for the current container state.

@@ -11,6 +11,7 @@
 #include "Engine/Engine.h"
 #include "GameFramework/GameUserSettings.h"
 #include "GameFramework/PlayerController.h"
+#include "RHI.h"
 #include "Core/OWCredits.h"
 #include "OWGCharacter.h"
 #include "OWGGameInstance.h"
@@ -246,31 +247,53 @@ UButton* UOWGMainMenuWidget::AddTouchButton(const FText& Label, const FVector2D&
 
 void UOWGMainMenuWidget::UpdateFrameCapLabel()
 {
-    static const float FrameCaps[] = { 0.0f, 30.0f, 40.0f, 60.0f };
-    const float Cap = FrameCaps[FMath::Clamp(FrameCapIndex, 0, 3)];
-    const FString Label = Cap <= 0.0f
+    const int32 Cap = SupportedFrameCaps.IsValidIndex(FrameCapIndex)
+        ? SupportedFrameCaps[FrameCapIndex]
+        : 0;
+    const FString Label = Cap == 0
         ? TEXT("حد الإطارات المطلوب: تلقائي")
-        : FString::Printf(TEXT("حد الإطارات المطلوب: %.0f FPS"), Cap);
+        : FString::Printf(TEXT("حد الإطارات المطلوب: %d FPS"), Cap);
     if (FrameCapLabel)
     {
         FrameCapLabel->SetText(FText::FromString(Label));
     }
 }
 
+void UOWGMainMenuWidget::RefreshSupportedFrameCaps()
+{
+    SupportedFrameCaps.Reset();
+    SupportedFrameCaps.Add(0);
+
+    static const int32 Candidates[] = { 30, 40, 45, 60, 90, 120 };
+    for (const int32 Cap : Candidates)
+    {
+        if (FPlatformRHIFramePacer::SupportsFramePace(Cap))
+        {
+            SupportedFrameCaps.Add(Cap);
+        }
+    }
+}
+
 void UOWGMainMenuWidget::SyncFrameCapSelection()
 {
+    RefreshSupportedFrameCaps();
     FrameCapIndex = 0;
-    if (const UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
+    if (UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
     {
         const float CurrentLimit = GameInstance->GetFrameRateLimit();
-        static const float FrameCaps[] = { 0.0f, 30.0f, 40.0f, 60.0f };
-        for (int32 Index = 0; Index < UE_ARRAY_COUNT(FrameCaps); ++Index)
+        bool bCurrentLimitSupported = FMath::IsNearlyZero(CurrentLimit);
+        for (int32 Index = 0; Index < SupportedFrameCaps.Num(); ++Index)
         {
-            if (FMath::IsNearlyEqual(CurrentLimit, FrameCaps[Index]))
+            if (FMath::IsNearlyEqual(CurrentLimit, static_cast<float>(SupportedFrameCaps[Index])))
             {
                 FrameCapIndex = Index;
+                bCurrentLimitSupported = true;
                 break;
             }
+        }
+        if (!bCurrentLimitSupported)
+        {
+            GameInstance->ApplyFrameRateLimit(0.0f);
         }
     }
     UpdateFrameCapLabel();
@@ -410,9 +433,15 @@ void UOWGMainMenuWidget::HandleContinueClicked()
 
 void UOWGMainMenuWidget::HandleFrameCapClicked()
 {
-    FrameCapIndex = (FrameCapIndex + 1) % 4;
-    static const float FrameCaps[] = { 0.0f, 30.0f, 40.0f, 60.0f };
-    const float NewLimit = FrameCaps[FrameCapIndex];
+    RefreshSupportedFrameCaps();
+    if (SupportedFrameCaps.Num() <= 1)
+    {
+        SetStatusMessage(FText::FromString(TEXT("لا توجد حدود إطارات مدعومة على هذا الجهاز")));
+        return;
+    }
+
+    FrameCapIndex = (FrameCapIndex + 1) % SupportedFrameCaps.Num();
+    const float NewLimit = static_cast<float>(SupportedFrameCaps[FrameCapIndex]);
 
     if (UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
     {

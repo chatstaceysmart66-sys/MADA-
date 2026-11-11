@@ -32,3 +32,18 @@ Logs: `Docs/logs/host_tests.log`, `Docs/logs/host_tests_sanitized.log`, `Docs/PY
 - Android SDK/NDK were not detected; no physical Android device was available.
 
 The C++ host tests exercise only engine-independent helper code. They do not prove UnrealHeaderTool compatibility, an Unreal build, actual gameplay, an APK, or device performance. The project remains an incomplete source prototype.
+
+## Follow-up execution — 2026-11-11
+
+From `OpenWorldGame_Merged_v0.2`, the following were rerun after the frame-cap UI change:
+
+| Target | Exact command | Result | Status |
+|---|---|---|---|
+| Static project validator | `python3 Scripts/validate_project.py` | `STATIC INTEGRITY: PASS`; engine compile reported NOT RUN | PASS (static check only) |
+| File/dependency audit | `python3 Scripts/audit_files.py` | 27 pass / 0 fail | PASS |
+| Python integrity tests | `python3 -m unittest discover -s Tests -v` | 15 tests; exit 0 | PASS |
+| C++ portable core | `bash Scripts/run_host_tests.sh` | 42/42; exit 0 | PASS |
+| Unreal C++/UHT | Not run | Unreal Engine/UBT unavailable | BLOCKED / NOT RUN |
+| Android APK and device tests | Not run | Android SDK/NDK, ADB, and physical device unavailable | BLOCKED / NOT RUN |
+
+The current environment reports g++ 13.3.0, Java 21, and Gradle available. This differs from the earlier handoff's g++ 14.2.0 / Gradle-not-found inventory; the direct tool checks in this follow-up are the current evidence. The new Frame Pacer integration has not been compiled by Unreal and its Android display-mode behavior remains unverified.

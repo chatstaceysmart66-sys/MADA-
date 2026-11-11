@@ -27,6 +27,7 @@ private:
     UButton* AddMenuButton(const FText& Label, const FName& Name);
     UButton* AddTouchButton(const FText& Label, const FVector2D& Position, const FVector2D& Size, const FName& Name, const FAnchors& Anchors = FAnchors(1.0f, 1.0f), const FVector2D& Alignment = FVector2D(1.0f, 1.0f));
     void SyncFrameCapSelection();
+    void RefreshSupportedFrameCaps();
     void UpdateFrameCapLabel();
 
     UFUNCTION()
@@ -117,6 +118,7 @@ private:
     bool bGameStarted = false;
     bool bPauseMenuVisible = false;
     int32 FrameCapIndex = 0;
+    TArray<int32> SupportedFrameCaps;
     OW::FrameStats FPSStats{1.0};
     float FPSLabelUpdateTime = 0.0f;
 };

@@ -11,6 +11,7 @@ public class OpenWorldGame : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
+            "RHI",
             "PhysicsCore",
             "InputCore",
             "UMG",

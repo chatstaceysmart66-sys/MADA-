@@ -17,3 +17,9 @@ test_unreal_and_apk_are_not_misreported_as_built (test_project_integrity.Project
 Ran 14 tests in 0.047s
 
 OK
+
+Follow-up run: 2026-11-11
+Command: python3 -m unittest discover -s Tests -v
+Result: PASS, 15/15 tests.
+Additional test: test_frame_cap_menu_uses_platform_supported_options
+The full command output is represented in Docs/TEST_REPORT.md; this file's earlier detailed output is retained as historical evidence.

@@ -10,7 +10,7 @@
 | شاشة الافتتاح | SOURCE CREATED / HOST TESTED | شاشة نصية تعرض الاسم والاعتماد وزر متابعة إلى القائمة؛ لم تُختبر داخل Unreal |
 | New Game / Continue | SOURCE CREATED / STATIC TESTED | New Game يحذف الحفظ ويعيد تحميل المستوى الحالي؛ Continue يحمل الحفظ أو يبدأ جلسة نظيفة؛ لم يُختبر الانتقال داخل Unreal |
 | Pause menu | SOURCE CREATED / STATIC TESTED | Escape وزر لمس يفتحان Pause، مع استئناف وحفظ؛ لم يُختبر إدخال أثناء الإيقاف داخل Unreal |
-| إعداد FPS محلي | SOURCE CREATED / STATIC TESTED | يتزامن مع حد الإطارات المحفوظ ويستدعي `SaveSettings()`؛ دعم الشاشة/Frame Pacing غير متحقق |
+| إعداد FPS محلي | SOURCE CREATED / STATIC TESTED | خيارات حد الإطارات تُرشّح عبر `FPlatformRHIFramePacer::SupportsFramePace`، والحد المحفوظ غير المدعوم يعود إلى Auto؛ لم يُبنَ Unreal ولم يُتحقق من أوضاع شاشة Android الفعلية |
 | Unreal project / Runtime module / Targets | SOURCE CREATED | ملفات المشروع والوحدة والهدفين موجودة؛ لم تُبنَ بالمحرك هنا |
 | شخصية ثالثة المنظور | SOURCE CREATED | CharacterMovement وكاميرا ومشي/ركض/قفز من إدخال اللعبة |
 | مركبة اختبار | SOURCE CREATED | جسم صلب واحد مع قوى تسارع وفرملة وتوجيه؛ ليست Chaos Vehicles |
@@ -18,10 +18,10 @@
 | Greybox | SOURCE CREATED | أرض وطريق وثلاث كتل مبانٍ ومركبة تُنشأ برمجياً وقت التشغيل |
 | UMG / لمس | SOURCE CREATED | أزرار حركة وقيادة وتفاعل وحفظ؛ التخطيط لم يُختبر على هاتف |
 | شاشة اعتماد المطور | SOURCE CREATED | النص «تطوير: عبدالله لازم» موحد في Core header ويُعرض في القائمة |
-| FPS | SOURCE CREATED | نافذة قياس من زمن الإطار؛ مستقلة عن حد الإطارات |
+| FPS | SOURCE CREATED / STATIC TESTED | قياس زمني مستقل؛ القائمة تستعلم دعم Frame Pacer، لكن معدل تحديث الشاشة الفعلي وسلوك Android لم يُختبرا |
 | Save/Load داخل اللعبة | SOURCE CREATED | Unreal `USaveGame` محلي لموضع الشخصية/المركبة وحد الإطارات |
 | Portable core helpers | SOURCE CREATED / HOST TESTED | تحويل وحدات، قياس FPS، دخول/خروج، نموذج حفظ/ترحيل مستقل |
-| Python integrity tests | PASS 14/14 | اختبارات بنية ومراجع مصدر وهوية MADA وPause وNew Game؛ ليست اختبارات Unreal |
+| Python integrity tests | PASS 15/15 | تشمل ربط خيارات FPS بـFrame Pacer؛ اختبارات ساكنة وليست اختبارات Unreal |
 | Host C++ tests | PASS 42/42 | g++ C++17 واختبارات منطق وهوية مستقلة عن Unreal |
 | Static file audit | PASS | فحص ملفات ومسارات وإعدادات ومراجع داخل المشروع |
 | Unreal C++ compile / UHT | BLOCKED / NOT RUN | Unreal Engine 5.8 غير مثبت في بيئة الدمج |
@@ -50,5 +50,11 @@
 - `python3 Scripts/audit_files.py`: تقرير المسارات في `Docs/logs/file_audit.log`.
 - `python3 -m unittest discover -s Tests -v`: المخرجات في `Docs/PYTHON_TEST_RESULTS.txt`.
 - `bash Scripts/run_host_tests.sh`: المخرجات في `Docs/logs/host_tests.log`.
+## تحقق متابعة — 2026-11-11
+
+- من جذر `OpenWorldGame_Merged_v0.2`: `python3 Scripts/validate_project.py` PASS؛ `python3 Scripts/audit_files.py` PASS 27/27؛ `python3 -m unittest discover -s Tests -v` PASS 15/15؛ `bash Scripts/run_host_tests.sh` PASS 42/42.
+- المترجم الذي أظهره التشغيل الحالي هو g++ 13.3.0. أداة `gradle` وJava 21 متاحتان؛ Unreal Editor/Build Tool وADB وAndroid SDK/NDK غير متاحة.
+- أضيف ترشيح خيارات حد الإطارات بفحص Frame Pacer وإرجاع الحد غير المدعوم إلى Auto. التحقق هنا ساكن فقط؛ UHT/Compile وقياس Refresh Rate لا يزالان NOT RUN.
+- لا تغيير في الحكم العام: المشروع مصدر أولي، APK غير مبني، واختبار جهاز فعلي BLOCKED.
 
 لا تعني هذه النتائج نجاح بناء Unreal أو اختبار اللعب. لا توجد ادعاءات PASS لم يثبتها أمر منفذ.

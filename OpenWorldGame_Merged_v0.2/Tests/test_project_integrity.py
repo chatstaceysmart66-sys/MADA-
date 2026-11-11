@@ -53,6 +53,17 @@ class ProjectIntegrityTests(unittest.TestCase):
         self.assertIn("Settings->ApplySettings(false)", game_instance)
         self.assertIn("Settings->SaveSettings()", game_instance)
 
+    def test_frame_cap_menu_uses_platform_supported_options(self):
+        build_rules = (ROOT / "Source/OpenWorldGame/OpenWorldGame.Build.cs").read_text(encoding="utf-8")
+        widget = (ROOT / "Source/OpenWorldGame/Private/OWGMainMenuWidget.cpp").read_text(encoding="utf-8")
+        self.assertIn('"RHI"', build_rules)
+        self.assertIn('FPlatformRHIFramePacer::SupportsFramePace(Cap)', widget)
+        self.assertIn("SupportedFrameCaps.Add(0)", widget)
+        self.assertIn("SupportedFrameCaps.Num()", widget)
+        self.assertIn("if (!bCurrentLimitSupported)", widget)
+        self.assertIn("GameInstance->ApplyFrameRateLimit(0.0f)", widget)
+        self.assertNotIn("static const float FrameCaps[]", widget)
+
     def test_new_game_resets_save_and_restarts_current_level(self):
         game_instance = (ROOT / "Source/OpenWorldGame/Private/OWGGameInstance.cpp").read_text(encoding="utf-8")
         widget = (ROOT / "Source/OpenWorldGame/Private/OWGMainMenuWidget.cpp").read_text(encoding="utf-8")
