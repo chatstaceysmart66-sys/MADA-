@@ -22,6 +22,8 @@ PASS  required path Docs/MASTER_SPEC_AR_v0.3.txt
 PASS  required path Docs/ASSET_LEDGER.csv
 PASS  required path Docs/ASSET_LICENSE_MANIFEST.csv
 PASS  required path Docs/ANDROID_DEVICE_TEST_MATRIX.csv
+PASS  required path Docs/WORKLOG_AR.md
+PASS  required path Docs/KNOWN_WARNINGS_AR.md
 PASS  plugin declarations are well-formed (zero optional plugins is valid)
 
-AUDIT pass=25 fail=0
+AUDIT pass=27 fail=0

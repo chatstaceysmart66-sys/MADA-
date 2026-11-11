@@ -92,8 +92,8 @@ void UOWGMainMenuWidget::NativeConstruct()
     Credit->SetJustification(ETextJustify::Center);
     MainMenuPanel->AddChildToVerticalBox(Credit);
 
-    UButton* StartButton = AddMenuButton(FText::FromString(TEXT("بدء التجربة")), TEXT("StartButton"));
-    StartButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleStartClicked);
+    UButton* StartButton = AddMenuButton(FText::FromString(TEXT("لعبة جديدة")), TEXT("StartButton"));
+    StartButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleNewGameClicked);
 
     UButton* ContinueButton = AddMenuButton(FText::FromString(TEXT("متابعة الحفظ")), TEXT("ContinueButton"));
     ContinueButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleContinueClicked);
@@ -105,6 +105,33 @@ void UOWGMainMenuWidget::NativeConstruct()
     FrameCapLabel->SetJustification(ETextJustify::Center);
     MainMenuPanel->AddChildToVerticalBox(FrameCapLabel);
     SyncFrameCapSelection();
+
+    PausePanel = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("PausePanel"));
+    UCanvasPanelSlot* PauseSlot = RootCanvas->AddChildToCanvas(PausePanel);
+    PauseSlot->SetAnchors(FAnchors(0.5f, 0.5f));
+    PauseSlot->SetAlignment(FVector2D(0.5f, 0.5f));
+    PauseSlot->SetAutoSize(true);
+
+    UTextBlock* PauseTitle = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("PauseTitle"));
+    PauseTitle->SetText(FText::FromString(TEXT("متوقف مؤقتاً")));
+    PauseTitle->SetJustification(ETextJustify::Center);
+    PausePanel->AddChildToVerticalBox(PauseTitle);
+
+    UButton* ResumeButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("ResumeButton"));
+    UTextBlock* ResumeText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
+    ResumeText->SetText(FText::FromString(TEXT("استئناف")));
+    ResumeText->SetJustification(ETextJustify::Center);
+    ResumeButton->AddChild(ResumeText);
+    PausePanel->AddChildToVerticalBox(ResumeButton);
+    ResumeButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleResumeClicked);
+
+    UButton* PauseSaveButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("PauseSaveButton"));
+    UTextBlock* PauseSaveText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
+    PauseSaveText->SetText(FText::FromString(TEXT("حفظ")));
+    PauseSaveText->SetJustification(ETextJustify::Center);
+    PauseSaveButton->AddChild(PauseSaveText);
+    PausePanel->AddChildToVerticalBox(PauseSaveButton);
+    PauseSaveButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleSaveClicked);
 
     StatusText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StatusText"));
     StatusText->SetText(FText::FromString(TEXT("نموذج أولي — الأصول الفنية النهائية غير مضافة")));
@@ -129,7 +156,10 @@ void UOWGMainMenuWidget::NativeConstruct()
     SpeedSlot->SetPosition(FVector2D(-18.0f, 18.0f));
     SpeedSlot->SetAutoSize(true);
 
-    SaveButton = AddTouchButton(FText::FromString(TEXT("حفظ")), FVector2D(-18.0f, 80.0f), FVector2D(82.0f, 52.0f), TEXT("SaveButton"), FAnchors(1.0f, 0.0f), FVector2D(1.0f, 0.0f));
+    PauseButton = AddTouchButton(FText::FromString(TEXT("إيقاف")), FVector2D(-18.0f, 80.0f), FVector2D(82.0f, 52.0f), TEXT("PauseButton"), FAnchors(1.0f, 0.0f), FVector2D(1.0f, 0.0f));
+    PauseButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandlePauseClicked);
+
+    SaveButton = AddTouchButton(FText::FromString(TEXT("حفظ")), FVector2D(-18.0f, 140.0f), FVector2D(82.0f, 52.0f), TEXT("SaveButton"), FAnchors(1.0f, 0.0f), FVector2D(1.0f, 0.0f));
     SaveButton->OnClicked.AddDynamic(this, &UOWGMainMenuWidget::HandleSaveClicked);
 
     FootInteractButton = AddTouchButton(FText::FromString(TEXT("تفاعل")), FVector2D(-18.0f, -18.0f), FVector2D(92.0f, 64.0f), TEXT("FootInteract"));
@@ -165,6 +195,7 @@ void UOWGMainMenuWidget::NativeConstruct()
     bGameStarted = false;
     StartupPanel->SetVisibility(ESlateVisibility::Visible);
     MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
+    PausePanel->SetVisibility(ESlateVisibility::Collapsed);
     FootInteractButton->SetVisibility(ESlateVisibility::Collapsed);
     JumpButton->SetVisibility(ESlateVisibility::Collapsed);
     SprintButton->SetVisibility(ESlateVisibility::Collapsed);
@@ -174,6 +205,12 @@ void UOWGMainMenuWidget::NativeConstruct()
     SteerRightButton->SetVisibility(ESlateVisibility::Collapsed);
     ExitVehicleButton->SetVisibility(ESlateVisibility::Collapsed);
     SaveButton->SetVisibility(ESlateVisibility::Collapsed);
+    PauseButton->SetVisibility(ESlateVisibility::Collapsed);
+
+    if (UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
+    {
+        if (GameInstance->ConsumeStartNewGameAfterTravel()) HandleStartClicked();
+    }
 }
 
 UButton* UOWGMainMenuWidget::AddMenuButton(const FText& Label, const FName& Name)
@@ -278,6 +315,7 @@ void UOWGMainMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
     SteerRightButton->SetVisibility(VehicleVisibility);
     ExitVehicleButton->SetVisibility(VehicleVisibility);
     SaveButton->SetVisibility(ESlateVisibility::Visible);
+    PauseButton->SetVisibility(ESlateVisibility::Visible);
 
     if (bDriving)
     {
@@ -302,10 +340,47 @@ void UOWGMainMenuWidget::HandleStartupContinueClicked()
     MainMenuPanel->SetVisibility(ESlateVisibility::Visible);
 }
 
+void UOWGMainMenuWidget::TogglePauseMenu()
+{
+    if (!bGameStarted || !PausePanel) return;
+
+    bPauseMenuVisible = !bPauseMenuVisible;
+    PausePanel->SetVisibility(bPauseMenuVisible ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    StartupBackdrop->SetVisibility(bPauseMenuVisible ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+    if (APlayerController* PC = GetOwningPlayer())
+    {
+        PC->SetPause(bPauseMenuVisible, FCanUnpause::CreateUObject(PC, &APlayerController::DefaultCanUnpause));
+        FInputModeGameAndUI InputMode;
+        PC->SetInputMode(InputMode);
+        PC->bShowMouseCursor = bPauseMenuVisible;
+    }
+}
+
+void UOWGMainMenuWidget::HandlePauseClicked()
+{
+    TogglePauseMenu();
+}
+
+void UOWGMainMenuWidget::HandleResumeClicked()
+{
+    if (bPauseMenuVisible) TogglePauseMenu();
+}
+
+void UOWGMainMenuWidget::HandleNewGameClicked()
+{
+    if (UOWGGameInstance* GameInstance = Cast<UOWGGameInstance>(GetGameInstance()))
+    {
+        if (GameInstance->StartNewGame()) return;
+    }
+    SetStatusMessage(FText::FromString(TEXT("تعذر بدء لعبة جديدة في هذا المستوى")));
+}
+
 void UOWGMainMenuWidget::HandleStartClicked()
 {
     bGameStarted = true;
+    bPauseMenuVisible = false;
     MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
+    PausePanel->SetVisibility(ESlateVisibility::Collapsed);
     if (APlayerController* PC = GetOwningPlayer())
     {
         PC->SetPause(false, FCanUnpause::CreateUObject(PC, &APlayerController::DefaultCanUnpause));
@@ -323,8 +398,13 @@ void UOWGMainMenuWidget::HandleContinueClicked()
     {
         bLoaded = GameInstance->LoadProgress();
     }
-    if (bLoaded) SyncFrameCapSelection();
-    SetStatusMessage(FText::FromString(bLoaded ? TEXT("تم تحميل الحفظ المحلي") : TEXT("لم يتم العثور على حفظة — بدأنا تجربة جديدة")));
+    if (!bLoaded)
+    {
+        HandleNewGameClicked();
+        return;
+    }
+    SyncFrameCapSelection();
+    SetStatusMessage(FText::FromString(TEXT("تم تحميل الحفظ المحلي")));
     HandleStartClicked();
 }
 

@@ -18,6 +18,7 @@ protected:
 private:
     void SaveFromKeyboard();
     void LoadFromKeyboard();
+    void TogglePauseFromKeyboard();
 
     UPROPERTY()
     TObjectPtr<UOWGMainMenuWidget> MainWidget;

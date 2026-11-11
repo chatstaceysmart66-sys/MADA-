@@ -100,6 +100,8 @@ def main() -> int:
         "Docs/TEST_REPORT.md",
         "Docs/ANDROID_DEVICE_TEST_MATRIX.csv",
         "Docs/ASSET_LICENSE_MANIFEST.csv",
+        "Docs/WORKLOG_AR.md",
+        "Docs/KNOWN_WARNINGS_AR.md",
     ]
     for relative in expected_docs:
         require((ROOT / relative).is_file(), f"Missing delivery document: {relative}")

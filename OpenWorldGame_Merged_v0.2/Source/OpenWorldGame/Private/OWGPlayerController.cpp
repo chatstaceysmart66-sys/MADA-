@@ -23,8 +23,10 @@ void AOWGPlayerController::SetupInputComponent()
     Super::SetupInputComponent();
     if (!InputComponent) return;
 
+    InputComponent->bExecuteWhenPaused = true;
     InputComponent->BindAction(TEXT("SaveGame"), IE_Pressed, this, &AOWGPlayerController::SaveFromKeyboard);
     InputComponent->BindAction(TEXT("LoadGame"), IE_Pressed, this, &AOWGPlayerController::LoadFromKeyboard);
+    InputComponent->BindAction(TEXT("PauseMenu"), IE_Pressed, this, &AOWGPlayerController::TogglePauseFromKeyboard);
 }
 
 void AOWGPlayerController::SaveFromKeyboard()
@@ -48,5 +50,13 @@ void AOWGPlayerController::LoadFromKeyboard()
         {
             MainWidget->SetStatusMessage(FText::FromString(bLoaded ? TEXT("تم تحميل الحفظ المحلي") : TEXT("لا توجد حفظة صالحة")));
         }
+    }
+}
+
+void AOWGPlayerController::TogglePauseFromKeyboard()
+{
+    if (MainWidget)
+    {
+        MainWidget->TogglePauseMenu();
     }
 }

@@ -8,6 +8,9 @@
 |---|---|---|
 | هوية المشروع | SOURCE CREATED / HOST TESTED | MADA | مَدَى، وBEYOND THE HORIZON في metadata والواجهة؛ اسم الوحدة الداخلي محفوظ للتوافق |
 | شاشة الافتتاح | SOURCE CREATED / HOST TESTED | شاشة نصية تعرض الاسم والاعتماد وزر متابعة إلى القائمة؛ لم تُختبر داخل Unreal |
+| New Game / Continue | SOURCE CREATED / STATIC TESTED | New Game يحذف الحفظ ويعيد تحميل المستوى الحالي؛ Continue يحمل الحفظ أو يبدأ جلسة نظيفة؛ لم يُختبر الانتقال داخل Unreal |
+| Pause menu | SOURCE CREATED / STATIC TESTED | Escape وزر لمس يفتحان Pause، مع استئناف وحفظ؛ لم يُختبر إدخال أثناء الإيقاف داخل Unreal |
+| إعداد FPS محلي | SOURCE CREATED / STATIC TESTED | يتزامن مع حد الإطارات المحفوظ ويستدعي `SaveSettings()`؛ دعم الشاشة/Frame Pacing غير متحقق |
 | Unreal project / Runtime module / Targets | SOURCE CREATED | ملفات المشروع والوحدة والهدفين موجودة؛ لم تُبنَ بالمحرك هنا |
 | شخصية ثالثة المنظور | SOURCE CREATED | CharacterMovement وكاميرا ومشي/ركض/قفز من إدخال اللعبة |
 | مركبة اختبار | SOURCE CREATED | جسم صلب واحد مع قوى تسارع وفرملة وتوجيه؛ ليست Chaos Vehicles |
@@ -18,7 +21,7 @@
 | FPS | SOURCE CREATED | نافذة قياس من زمن الإطار؛ مستقلة عن حد الإطارات |
 | Save/Load داخل اللعبة | SOURCE CREATED | Unreal `USaveGame` محلي لموضع الشخصية/المركبة وحد الإطارات |
 | Portable core helpers | SOURCE CREATED / HOST TESTED | تحويل وحدات، قياس FPS، دخول/خروج، نموذج حفظ/ترحيل مستقل |
-| Python integrity tests | PASS 11/11 | اختبارات بنية ومراجع مصدر وهوية MADA؛ ليست اختبارات Unreal |
+| Python integrity tests | PASS 14/14 | اختبارات بنية ومراجع مصدر وهوية MADA وPause وNew Game؛ ليست اختبارات Unreal |
 | Host C++ tests | PASS 42/42 | g++ C++17 واختبارات منطق وهوية مستقلة عن Unreal |
 | Static file audit | PASS | فحص ملفات ومسارات وإعدادات ومراجع داخل المشروع |
 | Unreal C++ compile / UHT | BLOCKED / NOT RUN | Unreal Engine 5.8 غير مثبت في بيئة الدمج |

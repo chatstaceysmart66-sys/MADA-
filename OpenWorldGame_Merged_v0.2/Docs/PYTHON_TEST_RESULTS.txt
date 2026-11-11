@@ -1,9 +1,12 @@
 test_android_configuration_is_present (test_project_integrity.ProjectIntegrityTests.test_android_configuration_is_present) ... ok
 test_core_runtime_flow_is_connected (test_project_integrity.ProjectIntegrityTests.test_core_runtime_flow_is_connected) ... ok
 test_engine_independent_core_is_integrated (test_project_integrity.ProjectIntegrityTests.test_engine_independent_core_is_integrated) ... ok
+test_frame_rate_limit_is_persisted_locally (test_project_integrity.ProjectIntegrityTests.test_frame_rate_limit_is_persisted_locally) ... ok
 test_host_core_test_sources_cover_save_migration (test_project_integrity.ProjectIntegrityTests.test_host_core_test_sources_cover_save_migration) ... ok
 test_mada_branding_is_configured_for_startup_and_menu (test_project_integrity.ProjectIntegrityTests.test_mada_branding_is_configured_for_startup_and_menu) ... ok
+test_new_game_resets_save_and_restarts_current_level (test_project_integrity.ProjectIntegrityTests.test_new_game_resets_save_and_restarts_current_level) ... ok
 test_offline_permissions_and_mobile_render_config (test_project_integrity.ProjectIntegrityTests.test_offline_permissions_and_mobile_render_config) ... ok
+test_pause_menu_has_keyboard_and_touch_paths (test_project_integrity.ProjectIntegrityTests.test_pause_menu_has_keyboard_and_touch_paths) ... ok
 test_project_descriptor_is_valid (test_project_integrity.ProjectIntegrityTests.test_project_descriptor_is_valid) ... ok
 test_required_gameplay_sources_exist (test_project_integrity.ProjectIntegrityTests.test_required_gameplay_sources_exist) ... ok
 test_required_ummg_handlers_are_declared_and_implemented (test_project_integrity.ProjectIntegrityTests.test_required_ummg_handlers_are_declared_and_implemented) ... ok
@@ -11,6 +14,6 @@ test_static_validator_passes (test_project_integrity.ProjectIntegrityTests.test_
 test_unreal_and_apk_are_not_misreported_as_built (test_project_integrity.ProjectIntegrityTests.test_unreal_and_apk_are_not_misreported_as_built) ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 0.047s
+Ran 14 tests in 0.047s
 
 OK

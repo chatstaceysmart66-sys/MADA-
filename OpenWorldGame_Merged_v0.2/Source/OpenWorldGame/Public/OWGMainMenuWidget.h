@@ -21,6 +21,7 @@ public:
     virtual void NativeConstruct() override;
     virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
     void SetStatusMessage(const FText& Message);
+    void TogglePauseMenu();
 
 private:
     UButton* AddMenuButton(const FText& Label, const FName& Name);
@@ -30,6 +31,12 @@ private:
 
     UFUNCTION()
     void HandleStartupContinueClicked();
+    UFUNCTION()
+    void HandlePauseClicked();
+    UFUNCTION()
+    void HandleResumeClicked();
+    UFUNCTION()
+    void HandleNewGameClicked();
     UFUNCTION()
     void HandleStartClicked();
     UFUNCTION()
@@ -76,6 +83,8 @@ private:
     UPROPERTY()
     TObjectPtr<UVerticalBox> MainMenuPanel;
     UPROPERTY()
+    TObjectPtr<UVerticalBox> PausePanel;
+    UPROPERTY()
     TObjectPtr<UTextBlock> StatusText;
     UPROPERTY()
     TObjectPtr<UTextBlock> FPSLabel;
@@ -102,8 +111,11 @@ private:
     TObjectPtr<UButton> ExitVehicleButton;
     UPROPERTY()
     TObjectPtr<UButton> SaveButton;
+    UPROPERTY()
+    TObjectPtr<UButton> PauseButton;
 
     bool bGameStarted = false;
+    bool bPauseMenuVisible = false;
     int32 FrameCapIndex = 0;
     OW::FrameStats FPSStats{1.0};
     float FPSLabelUpdateTime = 0.0f;

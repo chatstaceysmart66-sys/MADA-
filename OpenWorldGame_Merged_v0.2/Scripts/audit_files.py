@@ -73,6 +73,7 @@ def main() -> int:
         "Tests/test_project_integrity.py", "Tests/HostTests/test_main.cpp",
         "Docs/MASTER_SPEC_AR_v0.3.txt", "Docs/ASSET_LEDGER.csv",
         "Docs/ASSET_LICENSE_MANIFEST.csv", "Docs/ANDROID_DEVICE_TEST_MATRIX.csv",
+        "Docs/WORKLOG_AR.md", "Docs/KNOWN_WARNINGS_AR.md",
     ]
     for rel in required:
         check(f"required path {rel}", (ROOT / rel).is_file())

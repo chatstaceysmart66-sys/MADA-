@@ -6,7 +6,9 @@
 - Added centralized UTF-8 brand constants and a text startup screen with developer credit and a working continue-to-menu button.
 - Set the Unreal project name and Android display name to MADA.
 - Synced the displayed frame-cap option with the active game-user setting at startup and after loading a save.
-- Added host-side branding checks; Python integrity tests pass 11/11 and C++ host tests pass 42/42.
+- Added Escape/touch Pause menu with Resume and Save, and split New Game from Continue. New Game removes the old slot, reloads the current level, then starts play; Continue loads a valid save or falls back to New Game.
+- Persisted the selected frame limit through `UGameUserSettings::SaveSettings()`.
+- Added host-side coverage; Python integrity tests pass 14/14 and C++ host tests pass 42/42.
 - Unreal compilation, Android packaging, and device validation remain NOT RUN because the required tools and device are unavailable.
 
 ## 2026-11-11 — source merge and hardening

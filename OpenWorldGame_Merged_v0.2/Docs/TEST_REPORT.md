@@ -6,9 +6,9 @@
 |---|---|---|---|
 | C++ Core | هوية MADA، تحويل السرعة، FPS، حدود الإطارات، شروط دخول/خروج، CRC وترحيل الحفظ | PASS 42/42 | `Docs/logs/host_tests.log` |
 | C++ sanitizers | إعادة اختبارات Core مع AddressSanitizer وUndefinedBehaviorSanitizer | PASS 42/42 | `Docs/logs/host_tests_sanitized.log` |
-| Python integrity | فحص وصف المشروع وإعداداته وهوية MADA والـcallbacks وترابط المسارات | PASS 11/11 | `Docs/PYTHON_TEST_RESULTS.txt` |
+| Python integrity | فحص وصف المشروع وإعداداته وهوية MADA وPause وNew Game والـcallbacks | PASS 14/14 | `Docs/PYTHON_TEST_RESULTS.txt` |
 | Static project validator | فحص ملفات المشروع الأساسية وإعداد Android | PASS | `Docs/STATIC_VALIDATION_RESULTS.txt` |
-| File/dependency audit | الوحدات والأهداف والـincludes المحلية والإعدادات والوثائق | PASS 25/25 | `Docs/logs/file_audit.log` |
+| File/dependency audit | الوحدات والأهداف والـincludes المحلية والإعدادات والوثائق | PASS 27/27 | `Docs/logs/file_audit.log` |
 | `.uproject` JSON | تحليل JSON وتأكيد UE 5.8 ووحدة Runtime واحدة | PASS | `Docs/MERGE_REPORT_AR.md` |
 | Module registration | التأكد من وجود تسجيل Module واحد في المسار القياسي | PASS | `Docs/MERGE_REPORT_AR.md` |
 

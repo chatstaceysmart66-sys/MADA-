@@ -1,6 +1,6 @@
-date_utc=2026-11-11T15:41:21Z
+date_utc=2026-11-11T16:20:31Z
 compiler=g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
-base_commit=1ebde67
+base_commit=d8b1040
 cmd: g++ -std=c++17 -Wall -Wextra -Werror -O1 -fsanitize=address,undefined -fno-omit-frame-pointer Tests/HostTests/test_main.cpp -o /tmp/owg_host_tests_sanitized
 compile_exit=0
 PASS  English game name exact

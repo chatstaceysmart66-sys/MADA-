@@ -10,6 +10,28 @@
 
 const FString UOWGGameInstance::SaveSlotName = TEXT("OWG_Local_Save_01");
 
+bool UOWGGameInstance::StartNewGame()
+{
+    const FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this, true);
+    if (CurrentLevelName.IsEmpty()) return false;
+
+    if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+    {
+        if (!UGameplayStatics::DeleteGameInSlot(SaveSlotName, 0)) return false;
+    }
+
+    bStartNewGameAfterTravel = true;
+    UGameplayStatics::OpenLevel(this, FName(*CurrentLevelName));
+    return true;
+}
+
+bool UOWGGameInstance::ConsumeStartNewGameAfterTravel()
+{
+    const bool bShouldStart = bStartNewGameAfterTravel;
+    bStartNewGameAfterTravel = false;
+    return bShouldStart;
+}
+
 bool UOWGGameInstance::SaveProgress()
 {
     UOWGSaveGame* SaveObject = Cast<UOWGSaveGame>(UGameplayStatics::CreateSaveGameObject(UOWGSaveGame::StaticClass()));
@@ -99,6 +121,7 @@ void UOWGGameInstance::ApplyFrameRateLimit(float NewLimit)
     {
         Settings->SetFrameRateLimit(FMath::Max(0.0f, NewLimit));
         Settings->ApplySettings(false);
+        Settings->SaveSettings();
     }
 }
 

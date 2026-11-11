@@ -40,9 +40,9 @@
 
 - اختبارات C++ المستقلة: **42/42 PASS**.
 - فحص C++ الإضافي مع AddressSanitizer وUndefinedBehaviorSanitizer: **42/42 PASS**.
-- اختبارات Python: **11/11 PASS**.
+- اختبارات Python: **14/14 PASS**.
 - مدقق المشروع: **PASS**، ويتحقق من 21 ملف مصدر/رأس ويعلن بوضوح أن Unreal Compile وAPK لم يُنفذا.
-- تدقيق الملفات والاعتماديات: **25/25 PASS**.
+- تدقيق الملفات والاعتماديات: **27/27 PASS**.
 - JSON ملف `.uproject`: صالح، EngineAssociation = 5.8، وRuntime Module واحدة.
 - تسجيل Module: مرجع تنفيذي واحد فقط.
 - ملف المواصفات في المشروع مطابق حرفياً للملف الأصلي.

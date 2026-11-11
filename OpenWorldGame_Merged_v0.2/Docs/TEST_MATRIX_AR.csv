@@ -4,10 +4,12 @@ ST-002,Project,Single runtime module and target files exist,PASS,Scripts/audit_f
 ST-003,Source,Local OWG Core SaveSystem includes resolve,PASS,Docs/logs/file_audit.log,Host-side file audit
 ST-004,Input,Axis and Action mappings match C++ bindings,PASS,Scripts/validate_project.py,Static names comparison
 ST-005,Branding,MADA metadata and startup/menu source wiring,PASS,Tests/test_project_integrity.py,Static source/config check; not Unreal Runtime validation
+ST-006,Gameplay UI,Pause menu is wired to Escape and touch with resume/save,PASS,Tests/test_project_integrity.py,Static source/config check only; Unreal pause behavior not run
+ST-007,Progression,New Game deletes save and reloads current level; Continue is separate,PASS,Tests/test_project_integrity.py,Static source/config check only; level travel not run
 HOST-001,C++,Engine-independent core logic tests,PASS,Docs/logs/host_tests.log,42/42 with g++ C++17; not Unreal tests
 HOST-002,C++,ASan and UBSan host tests,PASS,Docs/logs/host_tests_sanitized.log,42/42; host-only
-PY-001,Python,Project integrity tests,PASS,Docs/PYTHON_TEST_RESULTS.txt,11/11
-AUD-001,Project,Static file and dependency audit,PASS,Docs/logs/file_audit.log,25/25
+PY-001,Python,Project integrity tests,PASS,Docs/PYTHON_TEST_RESULTS.txt,14/14
+AUD-001,Project,Static file and dependency audit,PASS,Docs/logs/file_audit.log,27/27
 UE-001,Build,UnrealHeaderTool completes,BLOCKED,,Requires Unreal Engine 5.8
 UE-002,Build,OpenWorldGameEditor Win64 Development build,BLOCKED,,Requires UE 5.8 and matching toolchain
 UE-003,Runtime,PIE reaches menu and all buttons work,NOT RUN,,Requires Unreal Editor

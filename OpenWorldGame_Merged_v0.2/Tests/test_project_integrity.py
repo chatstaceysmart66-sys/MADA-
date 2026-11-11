@@ -32,7 +32,35 @@ class ProjectIntegrityTests(unittest.TestCase):
         self.assertIn("StartupBackdrop->SetVisibility(ESlateVisibility::Collapsed)", widget)
         self.assertIn("HandleStartupContinueClicked", widget)
         self.assertIn("void UOWGMainMenuWidget::SyncFrameCapSelection()", widget)
-        self.assertIn("if (bLoaded) SyncFrameCapSelection();", widget)
+        self.assertIn("SyncFrameCapSelection();", widget)
+
+    def test_pause_menu_has_keyboard_and_touch_paths(self):
+        input_config = (ROOT / "Config/DefaultInput.ini").read_text(encoding="utf-8")
+        controller = (ROOT / "Source/OpenWorldGame/Private/OWGPlayerController.cpp").read_text(encoding="utf-8")
+        widget = (ROOT / "Source/OpenWorldGame/Private/OWGMainMenuWidget.cpp").read_text(encoding="utf-8")
+        self.assertIn('ActionName="PauseMenu",Key=Escape', input_config)
+        self.assertIn('BindAction(TEXT("PauseMenu")', controller)
+        self.assertIn("InputComponent->bExecuteWhenPaused = true", controller)
+        self.assertIn("void UOWGMainMenuWidget::TogglePauseMenu()", widget)
+        self.assertIn("StartupBackdrop->SetVisibility(bPauseMenuVisible", widget)
+        self.assertIn("PauseButton->OnClicked.AddDynamic", widget)
+        self.assertIn("HandleResumeClicked", widget)
+        self.assertIn("SyncFrameCapSelection();", widget)
+
+    def test_frame_rate_limit_is_persisted_locally(self):
+        game_instance = (ROOT / "Source/OpenWorldGame/Private/OWGGameInstance.cpp").read_text(encoding="utf-8")
+        self.assertIn("Settings->SetFrameRateLimit", game_instance)
+        self.assertIn("Settings->ApplySettings(false)", game_instance)
+        self.assertIn("Settings->SaveSettings()", game_instance)
+
+    def test_new_game_resets_save_and_restarts_current_level(self):
+        game_instance = (ROOT / "Source/OpenWorldGame/Private/OWGGameInstance.cpp").read_text(encoding="utf-8")
+        widget = (ROOT / "Source/OpenWorldGame/Private/OWGMainMenuWidget.cpp").read_text(encoding="utf-8")
+        self.assertIn("UGameplayStatics::DeleteGameInSlot(SaveSlotName, 0)", game_instance)
+        self.assertIn("if (!UGameplayStatics::DeleteGameInSlot", game_instance)
+        self.assertIn("UGameplayStatics::OpenLevel(this, FName(*CurrentLevelName))", game_instance)
+        self.assertIn("ConsumeStartNewGameAfterTravel()", widget)
+        self.assertIn("HandleNewGameClicked", widget)
 
     def test_required_gameplay_sources_exist(self):
         required = [
